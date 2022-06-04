@@ -17,7 +17,7 @@ export default class Principal extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (response.data.mensaje) {

@@ -26,7 +26,7 @@ export default class createjob extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
         if (response.data.mensaje) {
 
@@ -36,7 +36,7 @@ export default class createjob extends Component {
 
         } 
 
-        const responseHorario = await axios.get('LOCAL_SERVER_APP/req/listar_horarios', config);
+        const responseHorario = await axios.get('http://localhost:5000/req/listar_horarios', config);
 
         if (responseHorario.data.mensaje) {
 
@@ -52,7 +52,7 @@ export default class createjob extends Component {
 
         e.preventDefault();
 
-        const response = await axios.post('LOCAL_SERVER_APP/empleo/create_job', {
+        const response = await axios.post('http://localhost:5000/empleo/create_job', {
             emp_codigo: this.state.emp_codigo,
             job_titulo:this.state.titulo,
             job_descripcion:this.state.descripcion,

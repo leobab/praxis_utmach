@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require('fs-extra');
 const mail = require("../libs/mail");
 const e = require("express");
+const { Console } = require("console");
 
 const usuarioctrl = {};
 
@@ -229,9 +230,13 @@ usuarioctrl.validar_cuenta = async (req, res) => {
 usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
+
+        
         await pool.query('SELECT usu_codigo FROM usuarios WHERE usu_correo = ? and usu_contrasena= ?', [usu_correo, usu_contrasena], (err, rows, fields) => {
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
+
+                console.log(json);
                 req.session.usu_codigo = json[0]['usu_codigo'];
                 console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
                 res.status(200).json({ mensaje: true });

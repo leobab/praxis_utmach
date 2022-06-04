@@ -17,7 +17,7 @@ export default class Modaladdidioms extends Component {
 
     async componentDidMount() {
 
-        const responseC = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseC = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseC.data.mensaje) {
@@ -28,7 +28,7 @@ export default class Modaladdidioms extends Component {
 
         }
 
-        const response = await axios.get('LOCAL_SERVER_APP/req/listar_niveles_idiomas', config);
+        const response = await axios.get('http://localhost:5000/req/listar_niveles_idiomas', config);
 
 
         if (response.data.mensaje) {
@@ -38,7 +38,7 @@ export default class Modaladdidioms extends Component {
 
         }
 
-        const responseI = await axios.get('LOCAL_SERVER_APP/req/listar_idiomas', config);
+        const responseI = await axios.get('http://localhost:5000/req/listar_idiomas', config);
 
 
         if (responseI.data.mensaje) {
@@ -67,7 +67,7 @@ export default class Modaladdidioms extends Component {
     howItWorks = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_idiomas', {
+        const response = await axios.post('http://localhost:5000/alum/guardar_idiomas', {
             alum_codigo: this.state.usu_codigo,
             idio_nombre: this.state.idio_nombre,
             idio_nivel: this.state.idio_nivel,
@@ -81,7 +81,7 @@ export default class Modaladdidioms extends Component {
             el.className = "col-md-4";
             el.id = "cardEst-" + data.idio_codigo;
             
-            const responseIdioma = await axios.post('LOCAL_SERVER_APP/req/visualizar_idioma', {
+            const responseIdioma = await axios.post('http://localhost:5000/req/visualizar_idioma', {
                 idi_codigo: this.state.idio_nombre,
                 niv_codigo: this.state.idio_nivel,
             }, config);

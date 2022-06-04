@@ -16,7 +16,7 @@ export default class Principal extends Component {
         usu_nombre: '',
         usu_foto: '',
         conectado: false,
-        ruta_server: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server: 'http://localhost:5000/public/usuarios/',
         alum_datos: [],
         emp_estado: '',
         emp_convenio: '',
@@ -26,7 +26,7 @@ export default class Principal extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
         if (response.data.mensaje) {
 
@@ -42,7 +42,7 @@ export default class Principal extends Component {
 
         console.log("usu_tipo: " + this.state.usu_tipo);
 
-        const responseA = await axios.get('LOCAL_SERVER_APP/alum/listar_alumnos', config);
+        const responseA = await axios.get('http://localhost:5000/alum/listar_alumnos', config);
 
         if (responseA.data.mensaje) {
 
@@ -53,7 +53,7 @@ export default class Principal extends Component {
         //estado de la empresa
         if (this.state.usu_tipo == "empresa") {
 
-            const responseEmp = await axios.post('LOCAL_SERVER_APP/emp/listar_empresa', {
+            const responseEmp = await axios.post('http://localhost:5000/emp/listar_empresa', {
                 usu_codigo: this.state.usu_codigo,
             }, config);
 
@@ -68,7 +68,7 @@ export default class Principal extends Component {
 
         }
 
-        const responseEmpleo = await axios.get('LOCAL_SERVER_APP/empleo/listar_empleos', config);
+        const responseEmpleo = await axios.get('http://localhost:5000/empleo/listar_empleos', config);
 
         if (responseEmpleo.data.mensaje) {
 

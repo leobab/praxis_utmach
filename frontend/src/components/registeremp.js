@@ -69,7 +69,7 @@ export default class main extends Component {
         formData.append('emp_fecha_creacion', this.state.emp_fecha_creacion);
         formData.append('emp_convenio', this.state.emp_convenio);
 
-        const responseUsuario = await axios.post('LOCAL_SERVER_APP/usuario/registrarse', formData,
+        const responseUsuario = await axios.post('http://localhost:5000/usuario/registrarse', formData,
             {
                 withCredentials: true, headers:
                 {

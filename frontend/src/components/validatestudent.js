@@ -17,7 +17,7 @@ export default class Validatestudent extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/alum/listar_alumnos', config);
+        const response = await axios.get('http://localhost:5000/alum/listar_alumnos', config);
 
         if (response.data.mensaje) {
 
@@ -62,7 +62,7 @@ export default class Validatestudent extends Component {
     }
 
     async eliminar(alum_codigo_enviado) {
-        const response = await axios.post('LOCAL_SERVER_APP/alum/eliminar_alumno', {
+        const response = await axios.post('http://localhost:5000/alum/eliminar_alumno', {
             alum_codigo: alum_codigo_enviado
         }, config);
 

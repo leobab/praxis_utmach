@@ -13,7 +13,7 @@ export default class Postulantes extends Component {
         alumnos: [],
         alumnos_ap: [],
         conectado: false,
-        ruta_server: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server: 'http://localhost:5000/public/usuarios/',
         job_nombre:'',
         job_estado:'',
         job_codigo:'',
@@ -25,7 +25,7 @@ export default class Postulantes extends Component {
 
     async componentDidMount() {
 
-        const responseSe = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseSe = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseSe.data.mensaje) {
@@ -38,7 +38,7 @@ export default class Postulantes extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2];
 
-        const response = await axios.get('LOCAL_SERVER_APP/empalum/list_postulantes/'+job_codigo_url, config);
+        const response = await axios.get('http://localhost:5000/empalum/list_postulantes/'+job_codigo_url, config);
 
         if (response.data.mensaje) {
 
@@ -53,7 +53,7 @@ export default class Postulantes extends Component {
         console.log(this.state.job_codigo);
 
 
-        const responseEmpleo = await axios.post('LOCAL_SERVER_APP/empleo/listar_empleos_xcodigo',{
+        const responseEmpleo = await axios.post('http://localhost:5000/empleo/listar_empleos_xcodigo',{
             job_codigo:job_codigo_url,
         }, config);
 
@@ -66,7 +66,7 @@ export default class Postulantes extends Component {
 
         }
 
-        const responseAP = await axios.get('LOCAL_SERVER_APP/empalum/list_postulantes_ap/'+job_codigo_url, config);
+        const responseAP = await axios.get('http://localhost:5000/empalum/list_postulantes_ap/'+job_codigo_url, config);
 
         if (responseAP.data.mensaje) {
 
@@ -121,7 +121,7 @@ export default class Postulantes extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2]; 
 
-        const response = await axios.post('LOCAL_SERVER_APP/empalum/empresa_seleccionar_alumno', {
+        const response = await axios.post('http://localhost:5000/empalum/empresa_seleccionar_alumno', {
 
             job_codigo: job_codigo_url,
             alum_codigo: alum_codigo_p,
@@ -163,7 +163,7 @@ export default class Postulantes extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2]; 
 
-        const response = await axios.post('LOCAL_SERVER_APP/empalum/seleccionar_alumno', {
+        const response = await axios.post('http://localhost:5000/empalum/seleccionar_alumno', {
 
             job_codigo: job_codigo_url,
             alum_codigo: alum_codigo_p,
@@ -203,7 +203,7 @@ export default class Postulantes extends Component {
     async finalizar(){
         const job_codigo_url = window.location.pathname.split("/")[2]; 
 
-        const response = await axios.post('LOCAL_SERVER_APP/empleo/finalizar_seleccion_alumnos', {
+        const response = await axios.post('http://localhost:5000/empleo/finalizar_seleccion_alumnos', {
 
             job_codigo: job_codigo_url,
 

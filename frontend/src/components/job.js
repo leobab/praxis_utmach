@@ -27,7 +27,7 @@ export default class Job extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (response.data.mensaje) {
@@ -40,7 +40,7 @@ export default class Job extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2];
 
-        const responseEmpleo = await axios.post('LOCAL_SERVER_APP/empleo/listar_empleos_xcodigo',{
+        const responseEmpleo = await axios.post('http://localhost:5000/empleo/listar_empleos_xcodigo',{
             job_codigo:job_codigo_url,
         }, config);
 
@@ -55,7 +55,7 @@ export default class Job extends Component {
 
         }
 
-        const responseAlum = await axios.get('LOCAL_SERVER_APP/req/ver_datos_alumno/' + this.state.alum_codigo, config);
+        const responseAlum = await axios.get('http://localhost:5000/req/ver_datos_alumno/' + this.state.alum_codigo, config);
 
         if (responseAlum.data.mensaje) {
 
@@ -65,7 +65,7 @@ export default class Job extends Component {
 
         }
 
-        const responseEstado = await axios.post('LOCAL_SERVER_APP/empalum/ver_estado_empleo_alumno/',{
+        const responseEstado = await axios.post('http://localhost:5000/empalum/ver_estado_empleo_alumno/',{
             job_codigo:job_codigo_url,
             alum_codigo: this.state.alum_codigo
         } ,config);
@@ -86,7 +86,7 @@ export default class Job extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2];
 
-        const response = await axios.post('LOCAL_SERVER_APP/empalum/guardar', {
+        const response = await axios.post('http://localhost:5000/empalum/guardar', {
             emp_codigo:this.state.emp_codigo,
             job_codigo:job_codigo_url,
             alum_codigo: this.state.alum_codigo
@@ -122,7 +122,9 @@ export default class Job extends Component {
                 <div class="col-lg-12 p-5 text center  ">
                     <div className="card mt-3">
                         <div className="card-body">
+                            <h1>this.state.job_estado</h1>
                             <If condition={this.state.alum_estado==1 && this.state.job_estado=="DISPONIBLE"}>
+
                                 <h5 className="card-title">{this.state.job_nombre} <button type="button" class="btn btn-success" style={{ float: 'right' }} onClick={()=> this.postularme(this.state.emp_codigo, this.state.alum_codigo)}>Postularme</button>
                                 <a href={"/profile/"+this.state.emp_codigo} target="_blank"><button type="button" class="btn btn-info mr-3" style={{ float: 'right' }}>Ver perfil de la empresa</button></a></h5>
                             </If>

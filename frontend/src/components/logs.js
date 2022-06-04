@@ -14,7 +14,7 @@ export default class logs extends Component {
 
     async componentDidMount() {
 
-        const responseSesion = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseSesion = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
         if (responseSesion.data.mensaje) {
 
@@ -26,7 +26,7 @@ export default class logs extends Component {
 
         }
 
-        const response = await axios.get('LOCAL_SERVER_APP/logs/lista', config);
+        const response = await axios.get('http://localhost:5000/logs/lista', config);
 
         if (response.data.mensaje) {
 

@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(cors({origin:['LOCAL_SERVER_APP','http://localhost:3000'],methods:['GET','POST','PUT','DELETE'],credentials:true}))
+app.use(cors({origin:['http://localhost:5000','http://localhost:3000'],methods:['GET','POST','PUT','DELETE'],credentials:true}))
 app.use('/public',express.static(path.resolve(__dirname,"public")));
 
 require('./src/routes/rutas')(app);

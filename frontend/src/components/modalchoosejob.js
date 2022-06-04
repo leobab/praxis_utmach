@@ -23,7 +23,7 @@ export default class Modalchoosejob extends Component {
 
         const alum_codigo = window.location.pathname.split("/")[2];
 
-        const responseC = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseC = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseC.data.mensaje) {
@@ -36,7 +36,7 @@ export default class Modalchoosejob extends Component {
         
         console.log(document.getElementById('modal_codigo').innerText);
 
-        const response = await axios.post('LOCAL_SERVER_APP/empalum/listar_empleos_alumno', {
+        const response = await axios.post('http://localhost:5000/empalum/listar_empleos_alumno', {
             alum_codigo: alum_codigo,
 
         }, config);
@@ -69,7 +69,7 @@ export default class Modalchoosejob extends Component {
 
         console.log("job codigo: "+job_codigo_url);
 
-        const response = await axios.post('LOCAL_SERVER_APP/empalum/seleccionar_alumno', {
+        const response = await axios.post('http://localhost:5000/empalum/seleccionar_alumno', {
 
             job_codigo: job_codigo_url,
             alum_codigo: this.state.alum_codigo

@@ -24,7 +24,7 @@ export default class Modaljobedit extends Component {
     async componentDidMount() {
 
 
-        const responseHorario = await axios.get('LOCAL_SERVER_APP/req/listar_horarios', config);
+        const responseHorario = await axios.get('http://localhost:5000/req/listar_horarios', config);
 
         if (responseHorario.data.mensaje) {
 
@@ -50,7 +50,7 @@ export default class Modaljobedit extends Component {
     howItWorks = async () => {
         
         try{
-            const response = await axios.post('LOCAL_SERVER_APP/empleo/update_job', {
+            const response = await axios.post('http://localhost:5000/empleo/update_job', {
             job_titulo: document.getElementById('job_titulo').value,
             job_descripcion:document.getElementById('job_descripcion').value, 
             job_area:document.getElementById('job_area').value, 

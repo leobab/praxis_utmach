@@ -36,7 +36,7 @@ export default class completeregisterstudent extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/req/listar_semestres', config);
+        const response = await axios.get('http://localhost:5000/req/listar_semestres', config);
 
 
         if (response.data.mensaje) {
@@ -46,7 +46,7 @@ export default class completeregisterstudent extends Component {
 
         }
 
-        const responseFecha = await axios.get('LOCAL_SERVER_APP/req/fecha_practica', config);
+        const responseFecha = await axios.get('http://localhost:5000/req/fecha_practica', config);
 
 
         if (responseFecha.data.mensaje) {
@@ -56,7 +56,7 @@ export default class completeregisterstudent extends Component {
 
         }
 
-        const responseP = await axios.get('LOCAL_SERVER_APP/req/listar_paralelos', config);
+        const responseP = await axios.get('http://localhost:5000/req/listar_paralelos', config);
 
 
         if (responseP.data.mensaje) {
@@ -66,7 +66,7 @@ export default class completeregisterstudent extends Component {
 
         }
 
-        const responseHorario = await axios.get('LOCAL_SERVER_APP/req/listar_horarios', config);
+        const responseHorario = await axios.get('http://localhost:5000/req/listar_horarios', config);
 
         if (responseHorario.data.mensaje) {
 
@@ -96,7 +96,7 @@ export default class completeregisterstudent extends Component {
         
         console.log("hola");
         
-            await axios.post('LOCAL_SERVER_APP/alum/completar_registro', formData,
+            await axios.post('http://localhost:5000/alum/completar_registro', formData,
             {
                 withCredentials: true, headers:
                 {
@@ -154,7 +154,7 @@ export default class completeregisterstudent extends Component {
 
             console.log("solo el codigo: " + id_exp);
 
-            const response = axios.post('LOCAL_SERVER_APP/alum/eliminar_experiencia', {
+            const response = axios.post('http://localhost:5000/alum/eliminar_experiencia', {
                 exp_codigo: id_exp,
             }, config);
 
@@ -172,7 +172,7 @@ export default class completeregisterstudent extends Component {
 
             console.log("solo el codigo: " + id_exp);
 
-            const response = axios.post('LOCAL_SERVER_APP/alum/eliminar_estudios', {
+            const response = axios.post('http://localhost:5000/alum/eliminar_estudios', {
                 est_codigo: id_exp,
             }, config);
 
@@ -189,7 +189,7 @@ export default class completeregisterstudent extends Component {
 
             const id_exp = exp[1];
 
-            const response = axios.post('LOCAL_SERVER_APP/alum/eliminar_idiomas', {
+            const response = axios.post('http://localhost:5000/alum/eliminar_idiomas', {
                 idio_codigo: id_exp,
             }, config);
 
@@ -206,7 +206,7 @@ export default class completeregisterstudent extends Component {
 
             const id_exp = exp[1];
 
-            const response = axios.post('LOCAL_SERVER_APP/alum/eliminar_skills', {
+            const response = axios.post('http://localhost:5000/alum/eliminar_skills', {
                 ski_codigo: id_exp,
             }, config);
 

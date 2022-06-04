@@ -17,7 +17,7 @@ export default class Validateemp extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/emp/listar_empresas', config);
+        const response = await axios.get('http://localhost:5000/emp/listar_empresas', config);
 
         if (response.data.mensaje) {
 
@@ -62,7 +62,7 @@ export default class Validateemp extends Component {
     }
 
     async validar(emp_codigo_enviado) {
-        const response = await axios.post('LOCAL_SERVER_APP/emp/validar_empresa', {
+        const response = await axios.post('http://localhost:5000/emp/validar_empresa', {
             emp_codigo: emp_codigo_enviado
         }, config);
 
@@ -82,7 +82,7 @@ export default class Validateemp extends Component {
     }
 
     async eliminar(emp_codigo_enviado) {
-        const response = await axios.post('LOCAL_SERVER_APP/emp/eliminar_empresa', {
+        const response = await axios.post('http://localhost:5000/emp/eliminar_empresa', {
             emp_codigo: emp_codigo_enviado
         }, config);
 

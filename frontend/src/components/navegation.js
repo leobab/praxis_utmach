@@ -17,7 +17,7 @@ export default class navegation extends Component {
         usu_nombre: '',
         usu_foto: '',
         usu_tipo: '',
-        ruta_server_alumnos: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server_alumnos: 'http://localhost:5000/public/usuarios/',
         usu_correo: '',
         usu_contrasena: '',
         notis: []
@@ -31,7 +31,7 @@ export default class navegation extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (response.data.mensaje) {
@@ -69,7 +69,7 @@ export default class navegation extends Component {
 
         e.preventDefault();
 
-        const response = await axios.post('LOCAL_SERVER_APP/usuario/ingresar', {
+        const response = await axios.post('http://localhost:5000/usuario/ingresar', {
 
             usu_correo: this.state.usu_correo,
             usu_contrasena: this.state.usu_contrasena
@@ -93,7 +93,7 @@ export default class navegation extends Component {
 
     salir = async () => {
 
-        const resp = await axios.get('LOCAL_SERVER_APP/usuario/salir', config);
+        const resp = await axios.get('http://localhost:5000/usuario/salir', config);
 
         if (resp.data.mensaje) {
 
@@ -114,7 +114,7 @@ export default class navegation extends Component {
     }
 
     consultar_noti = async () => {
-        const resp = await axios.post('LOCAL_SERVER_APP/alum/consultar_noti_alumno', {
+        const resp = await axios.post('http://localhost:5000/alum/consultar_noti_alumno', {
             noti_para: this.state.usu_codigo
         }, config);
 
@@ -232,6 +232,7 @@ export default class navegation extends Component {
                                                         </label>
                                                 </div> */}
                                                 <button type="submit" class="btn btn-primary">Ingresar</button>
+                                                <div id="containerErrores" class="mt-3"></div>
                                             </form>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/chooseregister">¿No tienes cuenta? Registrate</a>

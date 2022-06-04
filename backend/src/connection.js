@@ -11,6 +11,8 @@ const database= {
   database: process.env.DB_DATABASE
 }
 
+
+
 const pool = mysql.createPool(database);
 
 
@@ -27,7 +29,7 @@ pool.getConnection((err, connection) => {
     }
   }
   if (connection) connection.release();
-  console.log('La BD se conectó',);
+  console.log('La BD se conectó');
   return;
 });
 

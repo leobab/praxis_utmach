@@ -17,7 +17,7 @@ export default class validatepost extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
         if (response.data.mensaje) {
 
@@ -27,7 +27,7 @@ export default class validatepost extends Component {
 
         } 
 
-        const responseEmpleo = await axios.get('LOCAL_SERVER_APP/empleo/listar_todos_empleos', config);
+        const responseEmpleo = await axios.get('http://localhost:5000/empleo/listar_todos_empleos', config);
 
         if (responseEmpleo.data.mensaje) {
 
@@ -67,7 +67,7 @@ export default class validatepost extends Component {
     }
 
     async eliminar(job_codigo_enviado) {
-        const response = await axios.post('LOCAL_SERVER_APP/empleo/eliminar_empleo', {
+        const response = await axios.post('http://localhost:5000/empleo/eliminar_empleo', {
             job_codigo: job_codigo_enviado
         }, config);
 

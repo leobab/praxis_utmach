@@ -16,7 +16,7 @@ export default class Modaladdskills extends Component {
 
     async componentDidMount() {
 
-        const responseC = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseC = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseC.data.mensaje) {
@@ -27,7 +27,7 @@ export default class Modaladdskills extends Component {
 
         }
 
-        const response = await axios.get('LOCAL_SERVER_APP/req/listar_niveles_skills', config);
+        const response = await axios.get('http://localhost:5000/req/listar_niveles_skills', config);
 
 
         if (response.data.mensaje) {
@@ -37,7 +37,7 @@ export default class Modaladdskills extends Component {
 
         }
 
-        const responseI = await axios.get('LOCAL_SERVER_APP/req/listar_skills', config);
+        const responseI = await axios.get('http://localhost:5000/req/listar_skills', config);
 
 
         if (responseI.data.mensaje) {
@@ -64,7 +64,7 @@ export default class Modaladdskills extends Component {
     howItWorks = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_skills', {
+        const response = await axios.post('http://localhost:5000/alum/guardar_skills', {
             alum_codigo: this.state.usu_codigo,
             ski_nombre: this.state.habilidad,
             ski_nivel: this.state.nivel,
@@ -78,7 +78,7 @@ export default class Modaladdskills extends Component {
             el.className = "col-md-4";
             el.id = "cardSki-" + data.ski_codigo;
             
-            const responseSkill = await axios.post('LOCAL_SERVER_APP/req/visualizar_skill', {
+            const responseSkill = await axios.post('http://localhost:5000/req/visualizar_skill', {
                 ski_codigo: this.state.habilidad,
                 niv_codigo: this.state.nivel,
             }, config);

@@ -28,7 +28,7 @@ export default class perfil extends Component {
         usu_direccion: '',
         usu_cedula_ruc: '',
         usu_descripcion: '',
-        ruta_server_empresas: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server_empresas: 'http://localhost:5000/public/usuarios/',
         usu_correo: '',
         usu_contrasena: '',
         id_usuario: '',
@@ -43,7 +43,7 @@ export default class perfil extends Component {
     }
     async componentDidMount() {
 
-        const responseSe = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseSe = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseSe.data.mensaje) {
@@ -56,7 +56,7 @@ export default class perfil extends Component {
 
         // //ver si la empresa que ve el perfil tiene convenio y está activa su cuenta
         // if (this.state.usu_tipo_sesion == 'empresa') {
-        //     const responseEmpS = await axios.get('LOCAL_SERVER_APP/req/ver_datos_empresa/' + this.state.usu_codigo, config);
+        //     const responseEmpS = await axios.get('http://localhost:5000/req/ver_datos_empresa/' + this.state.usu_codigo, config);
 
         //     if (responseEmpS.data.mensaje) {
         //         const dataS = responseEmpS.data.datos;
@@ -70,7 +70,7 @@ export default class perfil extends Component {
         //     //console.log("estado de la empresa: " + this.state.emp_estado_sesion);
         // }
 
-        /* const responseEmpleo = await axios.post('LOCAL_SERVER_APP/empleo/listar_empleos_empresa', {
+        /* const responseEmpleo = await axios.post('http://localhost:5000/empleo/listar_empleos_empresa', {
             emp_codigo: this.state.emp_codigo,
         }, config);
 
@@ -84,7 +84,7 @@ export default class perfil extends Component {
         const usuario = window.location.pathname.split("/")[2];
 
 
-        const responseEmpS = await axios.get('LOCAL_SERVER_APP/req/ver_datos_empresa/' + usuario, config);
+        const responseEmpS = await axios.get('http://localhost:5000/req/ver_datos_empresa/' + usuario, config);
 
         console.log("Perfil empresa: "+responseEmpS.data.datos);
 

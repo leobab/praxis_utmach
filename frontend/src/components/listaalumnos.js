@@ -9,14 +9,14 @@ export default class Validateempleos extends Component {
     state = {
         alumnos: [],
         conectado: false,
-        ruta_server: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server: 'http://localhost:5000/public/usuarios/',
     }
 
 
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/alum/listar_alumnos_disponibles', config);
+        const response = await axios.get('http://localhost:5000/alum/listar_alumnos_disponibles', config);
 
         if (response.data.mensaje) {
 

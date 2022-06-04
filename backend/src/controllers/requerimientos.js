@@ -48,7 +48,7 @@ reqctrl.listar_idiomas = async (req, res) => {
             if (!err) {
                 res.status(200).json({ mensaje: true, datos: JSON.parse(JSON.stringify(rows)) });
             } else {
-                res.status(200).json({ mensaje: false });
+                res.status(200).json({ mensaje: false, err: err});
             }
         })
     } catch (e) {

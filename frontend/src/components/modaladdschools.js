@@ -39,7 +39,7 @@ export default class Modaladdschools extends Component {
 
     async componentDidMount() {
 
-        const responseC = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseC = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseC.data.mensaje) {
@@ -50,7 +50,7 @@ export default class Modaladdschools extends Component {
 
         } 
 
-        const response = await axios.get('LOCAL_SERVER_APP/req/listar_niveles_estudios', config);
+        const response = await axios.get('http://localhost:5000/req/listar_niveles_estudios', config);
 
 
         if (response.data.mensaje) {
@@ -83,7 +83,7 @@ export default class Modaladdschools extends Component {
         e.preventDefault();
 
         if (this.state.mes_seleccionadoH == "") {
-            const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_estudios', {
+            const response = await axios.post('http://localhost:5000/alum/guardar_estudios', {
                 alum_codigo: this.state.usu_codigo,
                 est_centro_edu: this.state.est_centro_edu,
                 est_nivel: this.state.nivel_estudios_seleccionado,
@@ -106,7 +106,7 @@ export default class Modaladdschools extends Component {
 
         } else if (this.state.mes_seleccionadoH != "") {
             console.log("entra aca y el año es: "+this.state.año_seleccionadoH);
-            const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_estudios', {
+            const response = await axios.post('http://localhost:5000/alum/guardar_estudios', {
                 alum_codigo: this.state.usu_codigo,
                 est_centro_edu: this.state.est_centro_edu,
                 est_nivel: this.state.nivel_estudios_seleccionado,

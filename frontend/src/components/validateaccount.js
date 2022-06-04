@@ -26,7 +26,7 @@ export default class validarcuenta extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
         if (response.data.mensaje) {
 
@@ -49,7 +49,7 @@ export default class validarcuenta extends Component {
 
         e.preventDefault();
 
-        const response = await axios.post('LOCAL_SERVER_APP/usuario/validar_cuenta', {
+        const response = await axios.post('http://localhost:5000/usuario/validar_cuenta', {
 
             codigo_verificacion: this.state.codigo_verificacion
 
@@ -69,7 +69,7 @@ export default class validarcuenta extends Component {
 
     enviar_cod = async () => {
 
-        const response = await axios.post('LOCAL_SERVER_APP/usuario/enviar_codverificacion', {
+        const response = await axios.post('http://localhost:5000/usuario/enviar_codverificacion', {
 
             usu_correo: this.state.usu_correo
 

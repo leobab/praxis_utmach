@@ -19,7 +19,7 @@ export default class perfil extends Component {
 
     async componentDidMount() {
 
-        const responseSe = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseSe = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseSe.data.mensaje) {
@@ -32,7 +32,7 @@ export default class perfil extends Component {
 
         const usuario = window.location.pathname.split("/")[2];
 
-        const response = await axios.post('LOCAL_SERVER_APP/usuario/ver_usuario', {
+        const response = await axios.post('http://localhost:5000/usuario/ver_usuario', {
             usu_codigo: usuario,
 
         }, config);
@@ -50,7 +50,7 @@ export default class perfil extends Component {
 
             // if (data['usu_tipo'] == "empresa") {
 
-            //     const responseEmp = await axios.get('LOCAL_SERVER_APP/req/ver_datos_empresa/' + usuario, config);
+            //     const responseEmp = await axios.get('http://localhost:5000/req/ver_datos_empresa/' + usuario, config);
 
             //     if (responseEmp.data.mensaje) {
             //         const data = responseEmp.data.datos;
@@ -60,7 +60,7 @@ export default class perfil extends Component {
             //     }
 
             // } else if (data['usu_tipo']  == "alumno") {
-            //     const responseAlum = await axios.get('LOCAL_SERVER_APP/req/ver_datos_alumno/' + usuario, config);
+            //     const responseAlum = await axios.get('http://localhost:5000/req/ver_datos_alumno/' + usuario, config);
 
             //     if (responseAlum.data.mensaje) {
 

@@ -6,7 +6,7 @@ const metodo = {}
 
 metodo.estoy_conectado = async () => {
 
-    const resp = await axios.get('LOCAL_SERVER_APP/api/usuario/estoy_conectado', config)
+    const resp = await axios.get('http://localhost:5000/api/usuario/estoy_conectado', config)
 
     if (resp.data.mensaje) {
 
@@ -19,7 +19,7 @@ metodo.estoy_conectado = async () => {
 
 metodo.salir = async () => {
     
-    const resp = await axios.get('LOCAL_SERVER_APP/api/usuario/salir', config);
+    const resp = await axios.get('http://localhost:5000/api/usuario/salir', config);
 
     if (resp.data.mensaje) {
 

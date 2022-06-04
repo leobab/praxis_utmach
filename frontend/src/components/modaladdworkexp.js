@@ -35,7 +35,7 @@ export default class Modaladdworkexp extends Component {
 
     async componentDidMount() {
 
-        const response = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const response = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (response.data.mensaje) {
@@ -75,7 +75,7 @@ export default class Modaladdworkexp extends Component {
         e.preventDefault();
 
         if (this.state.mes_seleccionadoH == "") {
-            const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_experiencia', {
+            const response = await axios.post('http://localhost:5000/alum/guardar_experiencia', {
                 alum_codigo: this.state.usu_codigo,
                 exp_cargo: this.state.cargo,
                 exp_empresa_nombre: this.state.empresa,
@@ -113,7 +113,7 @@ export default class Modaladdworkexp extends Component {
 
 
         } else if (this.state.mes_seleccionadoH != "") {
-            const response = await axios.post('LOCAL_SERVER_APP/alum/guardar_experiencia', {
+            const response = await axios.post('http://localhost:5000/alum/guardar_experiencia', {
                 alum_codigo: this.state.usu_codigo,
                 exp_cargo: this.state.cargo,
                 exp_empresa_nombre: this.state.empresa,

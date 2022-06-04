@@ -22,7 +22,7 @@ export default class perfil extends Component {
         usu_direccion: '',
         usu_cedula_ruc: '',
         usu_descripcion: '',
-        ruta_server_alumnos: 'LOCAL_SERVER_APP/public/usuarios/',
+        ruta_server_alumnos: 'http://localhost:5000/public/usuarios/',
         usu_correo: '',
         usu_contrasena: '',
         experiencias: [],
@@ -49,7 +49,7 @@ export default class perfil extends Component {
 
     async componentDidMount() {
 
-        const responseSe = await axios.get('LOCAL_SERVER_APP/usuario/ver_sesion', config);
+        const responseSe = await axios.get('http://localhost:5000/usuario/ver_sesion', config);
 
 
         if (responseSe.data.mensaje) {
@@ -62,7 +62,7 @@ export default class perfil extends Component {
 
         //ver si la empresa que ve el perfil tiene convenio y está activa su cuenta
         if (this.state.usu_tipo_sesion == 'empresa') {
-            const responseEmpS = await axios.get('LOCAL_SERVER_APP/req/ver_datos_empresa/' + this.state.usu_codigo, config);
+            const responseEmpS = await axios.get('http://localhost:5000/req/ver_datos_empresa/' + this.state.usu_codigo, config);
 
             if (responseEmpS.data.mensaje) {
                 const dataS = responseEmpS.data.datos;
@@ -78,7 +78,7 @@ export default class perfil extends Component {
 
         const usuario = window.location.pathname.split("/")[2];
 
-        const responseAlum = await axios.get('LOCAL_SERVER_APP/req/ver_datos_alumno/' + usuario, config);
+        const responseAlum = await axios.get('http://localhost:5000/req/ver_datos_alumno/' + usuario, config);
 
         if (responseAlum.data.mensaje) {
 
@@ -101,7 +101,7 @@ export default class perfil extends Component {
 
     verExperiencia = async () => {
         const usuario = window.location.pathname.split("/")[2];
-        const responseE = await axios.post('LOCAL_SERVER_APP/alum/experiencia', {
+        const responseE = await axios.post('http://localhost:5000/alum/experiencia', {
             alum_codigo: usuario
         }, config);
         if (responseE.data.mensaje) {
@@ -112,7 +112,7 @@ export default class perfil extends Component {
     verEstudios = async () => {
         const usuario = window.location.pathname.split("/")[2];
         //console.log("usuario para ver estudios: " + usuario);
-        const responseEst = await axios.post('LOCAL_SERVER_APP/alum/estudios', {
+        const responseEst = await axios.post('http://localhost:5000/alum/estudios', {
             alum_codigo: usuario
         }, config);
 
@@ -123,7 +123,7 @@ export default class perfil extends Component {
 
     verSkills = async () => {
         const usuario = window.location.pathname.split("/")[2];
-        const responseSkl = await axios.post('LOCAL_SERVER_APP/alum/skills', {
+        const responseSkl = await axios.post('http://localhost:5000/alum/skills', {
             alum_codigo: usuario
         }, config);
         if (responseSkl.data.mensaje) {
@@ -133,7 +133,7 @@ export default class perfil extends Component {
 
     verIdiomas = async () => {
         const usuario = window.location.pathname.split("/")[2];
-        const responseSkl = await axios.post('LOCAL_SERVER_APP/alum/idiomas', {
+        const responseSkl = await axios.post('http://localhost:5000/alum/idiomas', {
             alum_codigo: usuario
         }, config);
 
