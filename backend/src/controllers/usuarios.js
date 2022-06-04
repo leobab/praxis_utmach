@@ -232,7 +232,7 @@ usuarioctrl.ingresar = async (req, res) => {
         const { usu_correo, usu_contrasena } = req.body;
 
         
-        await pool.query('SELECT usu_codigo FROM usuarios WHERE usu_correo = ? and usu_contrasena= ?', [usu_correo, usu_contrasena], (err, rows, fields) => {
+        await pool.query('SELECT usu_codigo FROM usuarios WHERE usu_correo = ? and usu_contrasena= ?', [usu_correo, usu_contrasena], async (err, rows, fields) => {
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
 

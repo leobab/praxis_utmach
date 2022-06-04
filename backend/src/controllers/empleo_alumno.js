@@ -9,15 +9,23 @@ var descripcion = "";
 empleoalumctrl.guardar = async (req, res) => {
     try {
         const { emp_codigo, job_codigo, alum_codigo } = req.body;
+
+        console.log("DATOS :"+emp_codigo, job_codigo, alum_codigo);
         descripcion = "El alumno/a: " + alum_codigo + " postuló para el empleo: " + job_codigo;
-        await pool.query(`INSERT INTO empleo_alumno (emp_codigo, job_codigo, alum_codigo, estado) VALUES(?, ?, ?, ?)`, [emp_codigo, job_codigo, alum_codigo, 'P'], async () => {
-            await pool.query(`insert into logs (log_descripcion, log_fecha) values (?, ?);`, [descripcion, datetime.toISOString().slice(0, 10)], async (err, rows) => {
-                if (!err) {
-                    res.status(200).json({ mensaje: true });
-                } else {
-                    res.status(200).json({ mensaje: false });
-                }
-            });
+        await pool.query(`INSERT INTO empleo_alumno (emp_codigo, job_codigo, alum_codigo, estado) VALUES(?, ?, ?, ?)`, [emp_codigo, job_codigo, alum_codigo, 'P'], async (err, rows) => {
+
+            if(!err){
+                await pool.query(`insert into logs (log_descripcion, log_fecha) values (?, ?);`, [descripcion, datetime.toISOString().slice(0, 10)], async (err, rows) => {
+                    if (!err) {
+                        res.status(200).json({ mensaje: true });
+                    } else {
+                        res.status(200).json({ mensaje: false, err: err  });
+                    }
+                });
+            }else{
+                res.status(200).json({ mensaje: false, err: err });
+            }
+            
         });
     } catch (e) {
         res.status(500).json({ mensaje: false, error: e });
@@ -109,13 +117,12 @@ empleoalumctrl.ver_estado_empleo_alumno = async (req, res) => {
     try {
         const { job_codigo, alum_codigo } = req.body;
         console.log('AQUI ENTRA A VER ESTADO EMPLEO '+job_codigo);
-        await pool.query(`SELECT estado from empleo_alumno where job_codigo= ? AND alum_codigo= ?`, [job_codigo, alum_codigo], async (err, rows) => {
+        await pool.query('SELECT estado from empleo_alumno where job_codigo= ? AND alum_codigo= ?', [job_codigo, alum_codigo], async (err, rows) => {
             if (!err) {
-                var json = JSON.parse(JSON.stringify(rows));
-                console.log(`ESTE ES EL JSON: `+json);
-                res.status(200).json({ mensaje: true, datos: json });
+               
+                res.status(200).json({ mensaje: true, datos: rows[0] });
             } else {
-                console.log(`ENTRA EN 205 AQUI  `);
+
                 res.status(200).json({ mensaje: false });
             }
         });

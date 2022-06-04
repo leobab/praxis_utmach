@@ -67,7 +67,13 @@ export default class Job extends Component {
 
         if (responseEstado.data.mensaje) {
             const data = responseEstado.data.datos;
-            this.setState({ estado: data.estado });
+
+            if(data == undefined){
+                this.setState({ estado: 'A' });
+            }else{
+                this.setState({ estado: data.estado });
+            }
+            
         }
 
         
