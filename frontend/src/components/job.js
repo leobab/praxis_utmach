@@ -122,7 +122,7 @@ export default class Job extends Component {
                 <div class="col-lg-12 p-5 text center  ">
                     <div className="card mt-3">
                         <div className="card-body">
-                            <h1>this.state.job_estado</h1>
+                            <h1>{this.state.job_estado}</h1>
                             <If condition={this.state.alum_estado==1 && this.state.job_estado=="DISPONIBLE"}>
 
                                 <h5 className="card-title">{this.state.job_nombre} <button type="button" class="btn btn-success" style={{ float: 'right' }} onClick={()=> this.postularme(this.state.emp_codigo, this.state.alum_codigo)}>Postularme</button>
