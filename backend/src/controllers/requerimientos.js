@@ -78,13 +78,9 @@ reqctrl.visualizar_idioma = async (req, res) => {
 
     try {
         const { idi_codigo, niv_codigo } = req.body;
-
-        console.log('CODIGO IDIOMA'+idi_codigo);
-        console.log('CODIGO Nivel'+niv_codigo);
         await pool.query("SELECT idi_nombre, niv_nombre FROM idiomas, niveles WHERE idi_codigo=? AND niv_codigo=?;", [idi_codigo, niv_codigo], (err, rows)=>{
             if(!err){
                 var json = JSON.parse(JSON.stringify(rows[0]));
-                console.log('--------------------------------');
                 res.status(200).json({ mensaje: true, datos: json });
             }else{
                 res.status(200).json({ mensaje: false });
@@ -179,7 +175,6 @@ reqctrl.ver_datos_alumno = async (req, res) => { //HAY QUE PROBAR CON DATOS
             if (!err) {
 
                 var json = JSON.parse(JSON.stringify(rows[0]));
-                console.log(json);
                 res.status(200).json({ mensaje: true, datos: json, id_sesion: req.session.usu_codigo });
             } else {
                 res.status(500).json({ mensaje: false });
@@ -199,7 +194,6 @@ reqctrl.ver_datos_empresa = async (req, res) => { //HAY QUE PROBAR CON DATOS
             if (!err) {
 
                 var json = JSON.parse(JSON.stringify(rows[0]));
-                console.log(json);
                 res.status(200).json({ mensaje: true, datos: json });
             } else {
                 res.status(500).json({ mensaje: false });

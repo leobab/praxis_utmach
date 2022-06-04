@@ -14,9 +14,6 @@ alumctrl.completar_registro = async (req, res) => {
             const alum_codigo = req.session.usu_codigo;
             const alum_cv = (req.file.filename);
             const { alum_descripcion, alum_d_pasantia, alum_sem, alum_paral, alum_disponibilidad, fecha_practica } = req.body;
-
-            console.log("DESCRIPCION DEL ALUMNO: "+alum_disponibilidad);
-            
             descripcion = "Se completó el registro del alumno/a: " + alum_codigo;
             await pool.query("UPDATE alumnos SET alum_descripcion=?, alum_d_pasantia=?, alum_cv=?, alum_sem=?, alum_paral=?, alum_disponibilidad=?, fecha_practica=? WHERE alum_codigo=?;", [alum_descripcion, alum_d_pasantia, alum_cv, alum_sem, alum_paral, alum_disponibilidad, fecha_practica, alum_codigo], async (err, rows) => {
                 
@@ -148,7 +145,6 @@ alumctrl.guardar_idiomas = async (req, res) => {
     try {
         const { alum_codigo, idio_nombre, idio_nivel } = req.body
 
-        console.log(alum_codigo, idio_nivel, idio_nombre);
         await pool.query(`insert into alum_idiomas (alum_codigo, idio_nombre, idio_nivel ) values (?,?,?);`, [alum_codigo, idio_nombre, idio_nivel], async (err) => {
             await pool.query(`select idio_codigo from alum_idiomas where alum_codigo= ? AND idio_nombre= ? AND idio_nivel = ? ;`, [alum_codigo, idio_nombre, idio_nivel], async (err, rows) => {
                 if (!err) {
@@ -192,8 +188,6 @@ alumctrl.guardar_skills = async (req, res) => {
                 if (!err) {
                     
                     var json = JSON.parse(JSON.stringify(rows));
-                    console.clear();
-                    console.log(json);
                     res.status(200).json({ mensaje: true, datos: json });
                 } else {
                     res.status(500).json({ mensaje: err.message });

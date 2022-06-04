@@ -55,10 +55,6 @@ export default class Modaljobedit extends Component {
             job_descripcion:document.getElementById('job_descripcion').value, 
             job_area:document.getElementById('job_area').value, 
             job_ubicacion:document.getElementById('job_ubicacion').value, 
-            job_fecha_ini:document.getElementById('job_fecha_ini').value, 
-            job_fecha_fin:document.getElementById('job_fecha_fin').value, 
-            job_hora_entrada:document.getElementById('job_hora_entrada').value, 
-            job_hora_salida:document.getElementById('job_hora_salida').value,
             job_codigo: document.getElementById('job_codigo').value,
             job_disponibilidad: document.getElementById('job_disponibilidad').value,
             }, config);
@@ -133,31 +129,9 @@ export default class Modaljobedit extends Component {
                                 </div>
                                 <div className='row'>
                                     <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Fecha inicio</h6>
-                                        <div class="md-form md-outline input-with-post-icon datepicker mb-3 mt-3">
-                                            <input type="date" id="job_fecha_ini" name="fecha_ini" onChange={this.onInputChange}  class="form-control" required />
-                                        </div>
-                                    </div>
-                                    <div className='col-3'>
                                         <h6 class="mt-3 mb-3">Fecha finalización</h6>
                                         <div class="md-form md-outline input-with-post-icon datepicker mb-3 mt-3">
                                             <input type="date" id="job_fecha_fin" name="fecha_fin" onChange={this.onInputChange} class="form-control" required />
-                                        </div>
-                                    </div>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Hora de entrada </h6>
-                                        <div className="form-group">
-                                            <div class="md-form ">
-                                                <input type="time" class="form-control" id="job_hora_entrada" name='hora_entrada'  onChange={this.onInputChange} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Hora de salida </h6>
-                                        <div className="form-group">
-                                            <div class="md-form ">
-                                                <input type="time" class="form-control" id="job_hora_salida" name='hora_salida' onChange={this.onInputChange} />
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

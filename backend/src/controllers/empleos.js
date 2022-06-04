@@ -79,10 +79,10 @@ empleoctrl.listar_empleos_empresa = async (req, res) => {
 empleoctrl.create_job = async (req, res) => {
     try {
         var datetime = new Date();
-        const { emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_ini, job_fecha_fin, job_hora_entrada, job_hora_salida, job_disponibilidad } = req.body;
+        const { emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_disponibilidad } = req.body;
         var descripcion = "Se creó el empleo: " + job_titulo + " de la empresa: " + emp_codigo;
 
-        await pool.query("INSERT INTO empleos (emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_creacion, job_fecha_ini, job_fecha_fin, job_estado, job_hora_entrada, job_hora_salida, job_fecha_actu, job_disponibilidad) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);", [emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, datetime.toISOString().slice(0, 10), job_fecha_ini, job_fecha_fin, 'DISPONIBLE', job_hora_entrada, job_hora_salida, null, job_disponibilidad], async (err, rows) => {
+        await pool.query("INSERT INTO empleos (emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_creacion, job_estado, job_fecha_actu, job_disponibilidad) VALUES (?,?,?,?,?,?,?,?,?);", [emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, datetime.toISOString().slice(0, 10),'DISPONIBLE', null, job_disponibilidad], async (err, rows) => {
             if (!err) {
                 await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
                 var json = JSON.parse(JSON.stringify(rows));
@@ -100,10 +100,10 @@ empleoctrl.create_job = async (req, res) => {
 empleoctrl.update_job = async (req, res) => {
     try {
         var datetime = new Date();
-        const { job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_ini, job_fecha_fin, job_hora_entrada, job_hora_salida, job_codigo, job_disponibilidad } = req.body;
+        const { job_titulo, job_descripcion, job_area, job_ubicacion,    job_codigo, job_disponibilidad } = req.body;
         var descripcion = "Se actualizó el empleo: " + job_titulo + " con código: " + job_codigo;
 
-        await pool.query(`UPDATE empleos SET job_titulo=?, job_descripcion=?, job_area=?, job_ubicacion=?, job_fecha_ini=?, job_fecha_fin=?, job_hora_entrada=?, job_hora_salida=?, job_fecha_actu=?, job_disponibilidad=? WHERE job_codigo=?;`, [job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_ini, job_fecha_fin, job_hora_entrada, job_hora_salida, datetime.toISOString().slice(0, 10), job_disponibilidad, job_codigo], async (err, rows) => {
+        await pool.query(`UPDATE empleos SET job_titulo=?, job_descripcion=?, job_area=?, job_ubicacion=?, job_fecha_actu=?, job_disponibilidad=? WHERE job_codigo=?;`, [job_titulo, job_descripcion, job_area, job_ubicacion,datetime.toISOString().slice(0, 10), job_disponibilidad, job_codigo], async (err, rows) => {
             await pool.query(`insert into logs (log_descripcion, log_fecha) values (?, ?);`, [descripcion, datetime.toISOString().slice(0, 10)]);
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
@@ -124,7 +124,6 @@ empleoctrl.listar_empleos_xcodigo = async (req, res) => {
         await pool.query(`select empl.*, (SELECT n.niv_nombre FROM niveles n WHERE n.niv_codigo=empl.job_disponibilidad) as job_disponibilidad, emp.usu_nombre as emp_nombre, emp.usu_codigo as emp_codigo from empleos empl, usuarios emp where job_codigo=? and empl.emp_codigo=emp.usu_codigo;`, [job_codigo], (err, rows) => {
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows[0]));
-                console.log(json);
                 res.status(200).json({ mensaje: true, datos: json });
             } else {
                 res.statu(200).json({ mensaje: false });

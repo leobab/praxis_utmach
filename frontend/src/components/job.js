@@ -16,13 +16,9 @@ export default class Job extends Component {
         alum_estado:'',
         job_ubicacion:'', 
         job_area:'', 
-        job_fecha_ini:'', 
-        job_fecha_fin:'',
-        job_hora_entrada:'', 
-        job_hora_salida:'',
         job_disponibilidad:'',
         alum_codigo:'',
-        estado:''
+        job_estado:''
     }
 
     async componentDidMount() {
@@ -49,8 +45,7 @@ export default class Job extends Component {
             const data = responseEmpleo.data.datos;
 
             this.setState({ job_nombre: data.job_titulo, job_descripcion: data.job_descripcion, emp_nombre: data.emp_nombre,
-            job_ubicacion:data.job_ubicacion, job_area:data.job_area, job_fecha_ini:data.job_fecha_ini, job_fecha_fin:data.job_fecha_fin,
-            job_hora_entrada:data.job_hora_entrada, job_hora_salida:data.job_hora_salida, emp_codigo:data.emp_codigo, job_disponibilidad:data.job_disponibilidad
+            job_ubicacion:data.job_ubicacion, job_area:data.job_area, emp_codigo:data.emp_codigo, job_disponibilidad:data.job_disponibilidad, job_estado:data.job_estado
         });
 
         }
@@ -71,11 +66,8 @@ export default class Job extends Component {
         } ,config);
 
         if (responseEstado.data.mensaje) {
-
             const data = responseEstado.data.datos;
-
             this.setState({ estado: data.estado });
-
         }
 
         
@@ -113,8 +105,6 @@ export default class Job extends Component {
 
 
 
-
-
     render() {
 
         return (
@@ -122,9 +112,8 @@ export default class Job extends Component {
                 <div class="col-lg-12 p-5 text center  ">
                     <div className="card mt-3">
                         <div className="card-body">
-                            <h1>{this.state.job_estado}</h1>
-                            <If condition={this.state.alum_estado==1 && this.state.job_estado=="DISPONIBLE"}>
-
+                            <h1>{this.state.job_codigo}</h1>
+                            <If condition={this.state.alum_estado==1 && this.state.job_estado=="DISPONIBLE" && this.state.estado!='P' }>
                                 <h5 className="card-title">{this.state.job_nombre} <button type="button" class="btn btn-success" style={{ float: 'right' }} onClick={()=> this.postularme(this.state.emp_codigo, this.state.alum_codigo)}>Postularme</button>
                                 <a href={"/profile/"+this.state.emp_codigo} target="_blank"><button type="button" class="btn btn-info mr-3" style={{ float: 'right' }}>Ver perfil de la empresa</button></a></h5>
                             </If>
@@ -135,7 +124,7 @@ export default class Job extends Component {
                             <If condition={this.state.alum_estado==1 && this.state.estado=="P"}>
                                 <h5 className="card-title">{this.state.job_nombre} 
                                 <a href={"/profile/"+this.state.emp_codigo} target="_blank"><button type="button" class="btn btn-info mr-3" style={{ float: 'right' }}>Ver perfil de la empresa</button></a></h5>
-                            </If>
+                            </If> 
                             
                             
                                 <div className='row mt-5'>
@@ -164,19 +153,7 @@ export default class Job extends Component {
                                 </div>
                                 <div className='row'>
                                     <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Fecha inicio</h6>
-                                        <label for="exampleInputEmail1">{this.state.job_fecha_ini}</label>
-                                    </div>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Fecha finalización</h6>
-                                        <label for="exampleInputEmail1">{this.state.job_fecha_fin}</label>
-                                    </div>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Hora de entrada </h6>
-                                        <label for="exampleInputEmail1">{this.state.job_hora_entrada}</label>
-                                    </div>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Hora de salida </h6>
+                                        <h6 class="mt-3 mb-3">Temporada de prácticas</h6>
                                         <label for="exampleInputEmail1">{this.state.job_hora_salida}</label>
                                     </div>
                                     

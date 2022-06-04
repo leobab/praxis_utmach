@@ -108,17 +108,21 @@ empleoalumctrl.seleccionar_alumno = async (req, res) => {
 empleoalumctrl.ver_estado_empleo_alumno = async (req, res) => {
     try {
         const { job_codigo, alum_codigo } = req.body;
-        await pool.query("select estado from empleo_alumno where job_codigo=? and alum_codigo=?", [job_codigo, alum_codigo], async (err, rows) => {
+        console.log('AQUI ENTRA A VER ESTADO EMPLEO '+job_codigo);
+        await pool.query(`SELECT estado from empleo_alumno where job_codigo= ? AND alum_codigo= ?`, [job_codigo, alum_codigo], async (err, rows) => {
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
+                console.log(`ESTE ES EL JSON: `+json);
                 res.status(200).json({ mensaje: true, datos: json });
             } else {
+                console.log(`ENTRA EN 205 AQUI  `);
                 res.status(200).json({ mensaje: false });
             }
         });
     } catch (e) {
         res.status(500).json({ mensaje: false, error: e });
     }
+    pool.end();
 }
 
 empleoalumctrl.listar_empleos_alumno = async (req, res) => {

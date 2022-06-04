@@ -37,41 +37,23 @@ export default class completeregisterstudent extends Component {
     async componentDidMount() {
 
         const response = await axios.get('http://localhost:5000/req/listar_semestres', config);
-
-
         if (response.data.mensaje) {
-
             this.setState({ semestres: this.state.semestres.concat(response.data.datos) });
-
-
         }
 
         const responseFecha = await axios.get('http://localhost:5000/req/fecha_practica', config);
-
-
         if (responseFecha.data.mensaje) {
-
             this.setState({ fecha_practica: this.state.fecha_practica.concat(responseFecha.data.datos) });
-
-
         }
 
         const responseP = await axios.get('http://localhost:5000/req/listar_paralelos', config);
-
-
         if (responseP.data.mensaje) {
-
             this.setState({ paralelos: this.state.paralelos.concat(responseP.data.datos) });
-
-
         }
 
         const responseHorario = await axios.get('http://localhost:5000/req/listar_horarios', config);
-
         if (responseHorario.data.mensaje) {
-
             this.setState({ horarios: this.state.horarios.concat(responseHorario.data.datos) });
-
         }
 
     }
