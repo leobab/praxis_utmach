@@ -59,7 +59,7 @@ export default class main extends Component {
                                     </div>
                                 </div>
                                 <div className="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay={200}>
-                                    <img src="https://img.freepik.com/foto-gratis/estudiantes-alegres-que-comunican-despues-lecciones_23-2147860636.jpg?w=900" className="img-fluid" alt />
+                                    <img src="https://scontent.fmch2-1.fna.fbcdn.net/v/t39.30808-6/269859785_4926633944065717_3387878180174933210_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=0debeb&_nc_eui2=AeGhkW879tkB0HyHr9thEopv56k4G1SMET_nqTgbVIwRP-wgLHJejVTp-DgesnLMEfqlEvVVwvsCZKB9QOmgq1iO&_nc_ohc=Ywl4xIARrhwAX-tJj3M&_nc_ht=scontent.fmch2-1.fna&oh=00_AT_o9v7sXXfph3iMmaqQxWvTko--H8iQbZIXFP8aqaowHQ&oe=62A1BE1F" className="img-fluid" alt />
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@ export default class main extends Component {
                                     </div>
                                 </div>
                                 <div className="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay={200}>
-                                    <img src="https://www.billin.net/blog/wp-content/uploads/2020/09/Certificado-de-empresa-1140x760.jpg" className="img-fluid" alt />
+                                    <img src="https://img.freepik.com/foto-gratis/gente-negocios-alegre-trabajo-terminado-grupo-trabajadores-oficina-felices-alcanzar-sus-propios-records-tener-exito_146671-13631.jpg?t=st=1654440857~exp=1654441457~hmac=581ce9e54464f8d7852c66338c7ac3bd63a53be8ef8a7517025d6e1b38c6fe82&w=1380" className="img-fluid" alt />
                                 </div>
                             </div>
                         </div>
@@ -97,7 +97,7 @@ export default class main extends Component {
                             </header>
 
                             <div class="card mb-3">
-                                <img style={{ height:"250px", width:"20" }} src="https://images.squarespace-cdn.com/content/v1/53aadf1de4b0a0a817640cca/1493052680347-305Z2MV014C8QRJ7HU8E/image-asset.jpeg?format=1000w" className="card-img-top" alt="Responsive image" />
+                                <img style={{ height:"250px", width:"20" }} src="https://img.freepik.com/foto-gratis/personas-tiro-medio-trabajando-juntas-escritorio_23-2149337238.jpg?t=st=1654440916~exp=1654441516~hmac=32c91d9a596db646c4f79c7b9eb24bbc07f737bc69c582d041f89767d4da5f27&w=1380" className="card-img-top" alt="Responsive image" />
 
                                     <div class="card-body">
                                         <h5 class="card-title">Incursionar</h5>
@@ -107,7 +107,7 @@ export default class main extends Component {
                             </div>
 
                             <div class="card mb-3">
-                                <img style={{ height:"250px", width:"20" }} src="https://www.redem.org/wp-content/uploads/2016/04/profesor-universitario.jpg" className="card-img-top" alt="Responsive image" />
+                                <img style={{ height:"250px", width:"20" }} src="https://img.freepik.com/foto-gratis/grupo-personas-diversas-que-tienen-reunion-negocios_53876-25060.jpg?t=st=1654441107~exp=1654441707~hmac=4b107b3bd6fb1ecb9adf0550ff3e04b738a4e2a94b2db1e5045f0d83cac427d4&w=1480" className="card-img-top" alt="Responsive image" />
 
                                     <div class="card-body">
                                         <h5 class="card-title">Proveer</h5>

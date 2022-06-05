@@ -9,7 +9,7 @@ export default class footer extends Component {
 
     render() {
         return (
-            <footer className="site-footer">
+            <footer className="site-footer bg-primary">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-3 col-md-6">

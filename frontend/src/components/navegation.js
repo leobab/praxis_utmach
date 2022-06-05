@@ -137,7 +137,7 @@ export default class navegation extends Component {
 
 
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top p-1">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top  p-1">
 
                 <div className="container">
 
