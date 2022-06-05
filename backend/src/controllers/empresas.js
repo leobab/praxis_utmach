@@ -55,7 +55,7 @@ empctrl.validar_empresa = async (req, res) => {
         descripcion = "Se valido la empresa con el código: " + emp_codigo;
         var descripcion_noti = "En hora buena! Tu cuenta de empresa ha sido validada."
         var noti_tipo = "VALIDACION";
-        await pool.query("UPDATE empresa set emp_estado='VALIDADO' WHERE emp_codigo=?;", [emp_codigo], async (err, rows, fields) => {
+        await pool.query("UPDATE empresa set emp_convenio = 'si', emp_estado='VALIDADO' WHERE emp_codigo=?;", [emp_codigo], async (err, rows, fields) => {
             await pool.query("insert into logs (log_descripcion, log_fecha) values (?,?);", [descripcion, datetime.toISOString().slice(0, 10)]);
             await pool.query("insert into notificaciones (noti_descripcion, noti_tipo, noti_para) values (?, ?, ?);" , [descripcion_noti, noti_tipo, emp_codigo ]);  
             if (!err) {

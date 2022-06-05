@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import $ from 'jquery';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import Swal from 'sweetalert2'
 import axios from 'axios'
 
 import config from '../metodos/config_session';
@@ -56,15 +54,11 @@ export default class Modaljobedit extends Component {
             job_disponibilidad: document.getElementById('job_disponibilidad').value,
             }, config);
 
-            toast.success('Empleo actualizado!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
+            Swal.fire(
+                'Actualizado!',
+                'Empleo actualizado con éxito',
+                'success'
+              );
             //limpia el modal
             document.getElementById('job_codigo').innerText = '';
         
@@ -79,7 +73,11 @@ export default class Modaljobedit extends Component {
 
 
         }catch (error) {
-            toast("Rellene todos los campos!");   
+            Swal.fire(
+                'Error!',
+                'Rellene todos los campos',
+                'error'
+              );  
         }
     
 
@@ -131,16 +129,7 @@ export default class Modaljobedit extends Component {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <button id="saveIdiom" type="button" class="btn btn-primary" onClick={this.howItWorks} >Actualizar</button>
-                            <ToastContainer position="top-right"
-                            autoClose={1000}
-                            hideProgressBar
-                            newestOnTop={false}
-                            closeOnClick={false}
-                            rtl={false}
-                            pauseOnFocusLoss={false}
-                            draggable={false}
-                            pauseOnHover={false}
-                            />
+                            
                         </div>
                     </div>
                 </div>

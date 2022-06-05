@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import config from '../metodos/config_session';
 import { If, Else, Then} from 'react-if';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Conectadofalse from './conectadofalse';
+import Swal from 'sweetalert2'
+
+
 export default class createjob extends Component {
 
     state = {
@@ -45,34 +45,57 @@ export default class createjob extends Component {
 
         e.preventDefault();
 
-        const response = await axios.post('http://localhost:5000/empleo/create_job', {
-            emp_codigo: this.state.emp_codigo,
-            job_titulo:this.state.titulo,
-            job_descripcion:this.state.descripcion,
-            job_area:this.state.area,
-            job_ubicacion:this.state.ubicacion,
-            job_disponibilidad: this.state.horario_empleo,
-        }, config);
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Se creará un nuevo empleo",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, crear!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empleo/create_job', {
+                    emp_codigo: this.state.emp_codigo,
+                    job_titulo:this.state.titulo,
+                    job_descripcion:this.state.descripcion,
+                    job_area:this.state.area,
+                    job_ubicacion:this.state.ubicacion,
+                    job_disponibilidad: this.state.horario_empleo,
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Creado!',
+                                'Empleado creado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.href = "/principal"
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error crear empleo',
+                                'error'
+                              );
+                        }
+                        
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error crear empleo',
+                            'error'
+                          );
+                    }
+                );
+            }
+          });
 
-
-        if (response.data.mensaje) {
-
-            toast.success('Empleo creado con éxito!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-
-            setTimeout(function(){
-                window.location.href = "/principal";
-            }, 2000);
-            
-
-        }
 
     }
 
@@ -132,16 +155,7 @@ export default class createjob extends Component {
                                         <a href="/principal"><button type="button" class="btn btn-danger mr-3" style={{ float: 'right' }}>Cancelar</button></a>
                                     </div>
                                 </form>
-                                <ToastContainer position="top-right"
-                                    autoClose={1000}
-                                    hideProgressBar
-                                    newestOnTop={false}
-                                    closeOnClick={false}
-                                    rtl={false}
-                                    pauseOnFocusLoss={false}
-                                    draggable={false}
-                                    pauseOnHover={false}
-                                    />
+                                
                             </div>
                         </div>
                         </div>

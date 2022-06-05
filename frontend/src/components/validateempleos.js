@@ -4,9 +4,7 @@ import axios from 'axios'
 import Conectadofalse from './conectadofalse';
 import Modaljobedit from './modaljobedit';
 import $ from 'jquery';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import Swal from 'sweetalert2'
 import config from '../metodos/config_session';
 
 export default class Validateempleos extends Component {
@@ -76,73 +74,106 @@ export default class Validateempleos extends Component {
     }
 
     async validar(job_codigo, emp_codigo) {
-        const response = await axios.post('http://localhost:5000/empleo/validar_empleo', {
-            job_codigo : job_codigo,
-            emp_codigo : emp_codigo
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "El emplo será validado y disponible para que los alumnos se postulen",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, validar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empleo/validar_empleo', {
+                    job_codigo : job_codigo,
+                    emp_codigo : emp_codigo
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Validado!',
+                                'Empleo validado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error validar empleo',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error validar empleo',
+                            'error'
+                          );
+                    }
+                );
 
-            toast.success('Empleo validado!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
-
-
-            
-            setTimeout(function(){
-                window.location.reload();
-            }, 2000);
-
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al validar empleo. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
+            }});
         
     }
     
 
     async eliminar(job_codigo_enviado) {
-        const response = await axios.post('http://localhost:5000/empleo/eliminar_empleo', {
-            job_codigo: job_codigo_enviado
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "El empleo será eliminado y todas sus postulaciones",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, borrar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empleo/eliminar_empleo', {
+                    job_codigo: job_codigo_enviado
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Eliminada!',
+                                'Empleo eliminado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error eliminar empleo',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error eliminar empleo',
+                            'error'
+                          );
+                    }
+                );
 
-            toast.success('Empleo eliminado con éxito!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
-
-                setTimeout(function(){
-                    window.location.reload();
-                }, 2000);
-            
-
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al borrar empleo. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-            
-        }
-
+            }});
         
 
     }
@@ -203,16 +234,7 @@ export default class Validateempleos extends Component {
                                     }
                                 </tbody>
                             </table>
-                            <ToastContainer position="top-right"
-                            autoClose={1000}
-                            hideProgressBar
-                            newestOnTop={false}
-                            closeOnClick={false}
-                            rtl={false}
-                            pauseOnFocusLoss={false}
-                            draggable={false}
-                            pauseOnHover={false}
-                            />
+                            
                         </div>
                     </div>
                 </Then>

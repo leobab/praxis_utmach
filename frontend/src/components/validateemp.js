@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { If, Else } from 'react-if';
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import $ from 'jquery';
+import Swal from 'sweetalert2'
+
 
 import config from '../metodos/config_session';
 
@@ -62,43 +63,108 @@ export default class Validateemp extends Component {
     }
 
     async validar(emp_codigo_enviado, emp_correo) {
-        const response = await axios.post('http://localhost:5000/emp/validar_empresa', {
-            emp_codigo: emp_codigo_enviado,
-            emp_correo : emp_correo
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "La empresa será validada y podrá crear empleos.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, validar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
 
-            window.location.href = "/validateemp";
+                const response =  axios.post('http://localhost:5000/emp/validar_empresa', {
+                    emp_codigo: emp_codigo_enviado,
+                    emp_correo : emp_correo
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Validada!',
+                                'Empresa validada con éxito',
+                                'success'
+                              );
 
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al validar empresa. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
+                              setTimeout(function(){
+                                window.location.reload();
+                            }, 2000);
+                              
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error valida empresa',
+                                'error'
+                              );
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error valida empresa',
+                            'error'
+                          );
+                    }
+                );
+              
+            }
+        })
+        
         
     }
 
     async eliminar(emp_codigo_enviado) {
-        const response = await axios.post('http://localhost:5000/emp/eliminar_empresa', {
-            emp_codigo: emp_codigo_enviado
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "La empresa será eliminada y todos sus empleos creados",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, borrar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/emp/eliminar_empresa', {
+                    emp_codigo: emp_codigo_enviado
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Eliminada!',
+                                'Empresa eliminada con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error eliminar empresa',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error eliminar empresa',
+                            'error'
+                          );
+                    }
+                );
 
-            window.location.href = "/validateemp";
-
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al borrar empresa. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
+            }});
+        
     }
 
     render() {
@@ -112,7 +178,6 @@ export default class Validateemp extends Component {
                 <div className='container mt-5' style={{ height: '500px' }}>
                     <h6 style={{ textAlign: 'center' }}>Empresas por validar</h6>
                     <hr></hr>
-                    <div id="containerErrores" class="mt-3"></div>
                     <table id="example" class="display">
                         <thead>
                             <tr>
@@ -154,6 +219,7 @@ export default class Validateemp extends Component {
                         </tbody>
                     </table>
                 </div>
+               
             </div>
 
 

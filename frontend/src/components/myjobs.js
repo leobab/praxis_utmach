@@ -4,8 +4,7 @@ import $ from 'jquery';
 import Modaljobedit from './modaljobedit';
 import config from '../metodos/config_session';
 import { If, Then, Else } from 'react-if';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2'
 
 export default class myjobs extends Component {
 
@@ -62,35 +61,54 @@ export default class myjobs extends Component {
     }
 
     async eliminar(job_codigo_enviado) {
-        const response = await axios.post('http://localhost:5000/empleo/eliminar_empleo', {
-            job_codigo: job_codigo_enviado
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Se eliminará el empleo y todas sus postulaciones",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, borrar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empleo/eliminar_empleo', {
+                    job_codigo: job_codigo_enviado
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Eliminado!',
+                                'Empleo eliminado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error eliminar empleo',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error eliminar empleo',
+                            'error'
+                          );
+                    }
+                );
 
-            toast.success('Empleo eliminado con éxito!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
+            }});
 
-            setTimeout(function(){
-                window.location.href = "/myjobs";
-            }, 2000);
-
-
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al borrar empleo. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
     }
 
     openmodal(job_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_disponibilidad){
@@ -166,16 +184,7 @@ export default class myjobs extends Component {
                         </tbody>
                     </table>
                 </div>
-                <ToastContainer position="top-right"
-                                autoClose={1000}
-                                hideProgressBar
-                                newestOnTop={false}
-                                closeOnClick={false}
-                                rtl={false}
-                                pauseOnFocusLoss={false}
-                                draggable={false}
-                                pauseOnHover={false}
-                                />
+               
 
                 
             </div>

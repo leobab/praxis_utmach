@@ -333,30 +333,30 @@ usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
         await pool.query('SELECT usu_contrasena, usu_codigo, usu_nombre FROM usuarios WHERE usu_correo = ?', [usu_correo], async (err, rows, fields) => {
-            if (!err) {
+            if(!err){
                 var json = JSON.parse(JSON.stringify(rows));
                 console.log(json);
                 var pass_correcta = bcrypt.compareSync(usu_contrasena, json[0]['usu_contrasena']); // true
 
-                if (pass_correcta) {
-                    try {
+                if(pass_correcta){
+                    try{
                         req.session.usu_codigo = json[0]['usu_codigo'];
                         req.session.usu_nombre = json[0]['usu_nombre'];
-                    } catch (error) {
+                    }catch(error){
                         res.status(500).json({ mensaje: false });
                     }
-
+                    
                     console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
                     res.status(200).json({ mensaje: true });
-                } else {
-                    res.status(500).json({ mensaje: false });
+                }else{
+                    res.status(500).json({ mensaje: false});
                 }
-
-            } else {
-                res.status(500).json({ mensaje: false, err: err });
+                
+            }else{
+                res.status(500).json({ mensaje: false, err: err});
             }
         });
-
+        
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });

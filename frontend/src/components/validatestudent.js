@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { If, Else } from 'react-if';
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import $ from 'jquery';
-
+import Swal from 'sweetalert2'
 import config from '../metodos/config_session';
 
 export default class Validatestudent extends Component {
@@ -62,22 +60,53 @@ export default class Validatestudent extends Component {
     }
 
     async eliminar(alum_codigo_enviado) {
-        const response = await axios.post('http://localhost:5000/alum/eliminar_alumno', {
-            alum_codigo: alum_codigo_enviado
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Se eliminará el alumno y todas sus postulaciones",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, borrar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/alum/eliminar_alumno', {
+                    alum_codigo: alum_codigo_enviado
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Eliminado!',
+                                'Alumno eliminado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error eliminar alumno',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error eliminar alumno',
+                            'error'
+                          );
+                    }
+                );
 
-            window.location.href = "/validatestudent";
-
-        }else{
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al borrar estudiante. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
+            }});
     }
 
     render() {
@@ -88,7 +117,6 @@ export default class Validatestudent extends Component {
                 <div className='container mt-5' style={{ height: '500px' }}>
                     <h6 style={{ textAlign: 'center' }}>Alumnos por validar</h6>
                     <hr></hr>
-                    <div id="containerErrores" class="mt-3"></div>
                     <table id="example" class="display">
                         <thead>
                             <tr>

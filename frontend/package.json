@@ -31,9 +31,10 @@
     "socket.io-client": "^2.3.0",
     "start": "^5.1.0",
     "styled-components": "^5.3.3",
+    "sweetalert2": "^11.4.17",
     "web-vitals": "^2.1.2"
   },
-  "homepage":"http://localhost:3000/",
+  "homepage": "http://localhost:3000/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

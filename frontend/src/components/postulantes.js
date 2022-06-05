@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import $ from 'jquery';
-import Profile from './profile';
+import Swal from 'sweetalert2'
 import config from '../metodos/config_session';
 import { If, Then, Else } from 'react-if';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default class Postulantes extends Component {
 
@@ -117,116 +115,114 @@ export default class Postulantes extends Component {
 
     }
 
-    async seleccionar_alumno(alum_codigo_p){
-
-        const job_codigo_url = window.location.pathname.split("/")[2]; 
-
-        const response = await axios.post('http://localhost:5000/empalum/empresa_seleccionar_alumno', {
-
-            job_codigo: job_codigo_url,
-            alum_codigo: alum_codigo_p,
-            empresa_codigo: this.state.usu_codigo,
-
-        }, config);
-
-        if (response.data.mensaje) {
-
-            toast.success('Alumno escogido!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-
-            setTimeout(function(){
-                window.location.href = "/postulantes/"+job_codigo_url;
-            }, 2000);
-            
-
-        }else{
-            toast.danger('Error en escoger alumno!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-        }
-    }
-
     async aprobar_alumno(alum_codigo_p){
 
         const job_codigo_url = window.location.pathname.split("/")[2]; 
 
-        const response = await axios.post('http://localhost:5000/empalum/seleccionar_alumno', {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Una vez aprobado, el alumno realizará las prácticas para este empleo.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, aprobar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empalum/seleccionar_alumno', {
 
-            job_codigo: job_codigo_url,
-            alum_codigo: alum_codigo_p,
+                    job_codigo: job_codigo_url,
+                    alum_codigo: alum_codigo_p,
 
-        }, config);
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Aprobado!',
+                                'Alumno seleccionado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error seleccionar alumno',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error seleccionar alumno',
+                            'error'
+                          );
+                    }
+                );
 
-        if (response.data.mensaje) {
+        }});
 
-            toast.success('Alumno aprobado!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-
-            setTimeout(function(){
-                window.location.href = "/postulantes/"+job_codigo_url;
-            }, 2000);
-            
-
-        }else{
-            toast.danger('Error al aprobar alumno!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-        }
     }
 
     async finalizar(){
         const job_codigo_url = window.location.pathname.split("/")[2]; 
 
-        const response = await axios.post('http://localhost:5000/empleo/finalizar_seleccion_alumnos', {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Una vez finalizado el proceso ya no se podrá escoger más alumnos para el empleo",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, finalizar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/empleo/finalizar_seleccion_alumnos', {
 
-            job_codigo: job_codigo_url,
+                    job_codigo: job_codigo_url,
 
-        }, config);
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Finalizado!',
+                                'Proceso de selección finalizado con éxito',
+                                'success'
+                              );
+                
+                                setTimeout(function(){
+                                    window.location.reload();
+                                }, 2000);
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error finalizar selección',
+                                'error'
+                              );
+                
+                               
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error finalizar selección',
+                            'error'
+                          );
+                    }
+                );
 
-        if (response.data.mensaje) {
+            }});
 
-            toast.success('Proceso de selección finalizado!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-
-            setTimeout(function(){
-                window.location.href = "/postulantes/"+job_codigo_url;
-            }, 2000);
-            
-
-        }
     }
 
 
@@ -286,16 +282,6 @@ export default class Postulantes extends Component {
                                     ))
                                 }
                             </tbody>
-                            <ToastContainer position="top-right"
-                                autoClose={1000}
-                                hideProgressBar
-                                newestOnTop={false}
-                                closeOnClick={false}
-                                rtl={false}
-                                pauseOnFocusLoss={false}
-                                draggable={false}
-                                pauseOnHover={false}
-                                />
                         </table>
                         <If condition={this.state.usu_tipo=="admin"}>
                             <button type="button"  title='Finalizar proceso de aprobación de alumnos' class="btn btn-success btn-sm mt-5" onClick={()=> this.finalizar()}>Finalizar proceso de aprobación</button>

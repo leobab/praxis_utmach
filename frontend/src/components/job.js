@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import config from '../metodos/config_session';
-import $ from 'jquery';
+import Swal from 'sweetalert2'
 import { If } from 'react-if'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+
 export default class Job extends Component {
 
     state = {
@@ -84,29 +84,57 @@ export default class Job extends Component {
 
         const job_codigo_url = window.location.pathname.split("/")[2];
 
-        const response = await axios.post('http://localhost:5000/empalum/guardar', {
-            emp_codigo:this.state.emp_codigo,
-            job_codigo:job_codigo_url,
-            alum_codigo: this.state.alum_codigo
-        }, config);
 
-        if (response.data.mensaje) {
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "Será tomado en cuenta para realizar las prácticas en este empleo.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, postularme!'
+          }).then((result) => {
+            if (result.isConfirmed) {
 
-            toast.success('Postulado exitosamente!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
+                axios.post('http://localhost:5000/empalum/guardar', {
+                    emp_codigo:this.state.emp_codigo,
+                    job_codigo:job_codigo_url,
+                    alum_codigo: this.state.alum_codigo
+                }, config).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            Swal.fire(
+                                'Postulado!',
+                                'Se ha postulado al empleo con éxito',
+                                'success'
+                              );
 
-            setTimeout(function(){
-                window.location.href = "/principal";
-            }, 2000);
+                              setTimeout(function(){
+                                window.location.reload();
+                            }, 2000);
+                              
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Error postular empleo',
+                                'error'
+                              );
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'Error postular empleo',
+                            'error'
+                          );
+                    }
+                );
+              
+            }
+        })
 
-        } 
     }
 
 
@@ -165,16 +193,7 @@ export default class Job extends Component {
                                     
                                 </div>
                                 
-                                <ToastContainer position="top-right"
-                                autoClose={1000}
-                                hideProgressBar
-                                newestOnTop={false}
-                                closeOnClick={false}
-                                rtl={false}
-                                pauseOnFocusLoss={false}
-                                draggable={false}
-                                pauseOnHover={false}
-                                />
+                                
                                 
                                 
                                 
