@@ -1,18 +1,18 @@
 const nodemailer = require('nodemailer');
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "mail.bolsapracticasmercadotecnia.com",
   secure: false,
-  port: 587,
-  service: 'gmail',
-  requireTLS: true,
+  port: 26,
   auth: {
-    user: 'leobab96@gmail.com',
-    pass: 'oboqhsgusnxzuywc'
+    user: 'administracion@bolsapracticasmercadotecnia.com',
+    pass: 'Jgonzalez1996@'
   },
   tls: {
     rejectUnauthorized: false
-  }
+}
 });
+
+
 
 module.exports = transporter;
