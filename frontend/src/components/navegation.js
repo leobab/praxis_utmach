@@ -129,7 +129,7 @@ export default class navegation extends Component {
 
 
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary  fixed-top p-1">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top p-1">
 
                 <div className="container">
 
@@ -143,9 +143,7 @@ export default class navegation extends Component {
                         </Else>
                     </If>
 
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
+                    
 
                     <If condition={this.state.conectado && this.state.usu_tipo === "alumno" || this.state.usu_tipo === "empresa" || this.state.usu_tipo === 'admin'}>
                         <Then>
@@ -211,7 +209,10 @@ export default class navegation extends Component {
                             </div>
                         </Then>
                         <Else>
-                            <div className="collapse navbar-collapse" id="navbarNav">
+                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                            <div className="collapse navbar-expand-lg navbar-collapse" id="navbarNav">
                                 <ul className="navbar-nav ml-auto flex-row flex justify-content-around">
                                     <li className="nav-item dropdown active">
                                         <Link class="dropdown-toggle" data-toggle="dropdown" style={{ color: "white" }}><b>Iniciar sesión</b> <span class="caret"></span></Link>

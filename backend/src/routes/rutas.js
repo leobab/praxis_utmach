@@ -5,7 +5,6 @@ const empresas= require("../controllers/empresas");
 const empleos= require("../controllers/empleos");
 const empleo_alumno= require("../controllers/empleo_alumno");
 const logs = require("../controllers/logs");
-
 const multer = require("../libs/multer");
 
 
@@ -20,6 +19,9 @@ module.exports = (app) =>{
     app.post("/usuario/enviar_codverificacion", usuarios.enviar_codverificacion);
     app.post("/usuario/validar_cuenta", usuarios.validar_cuenta);
     app.get("/usuario/salir", usuarios.salir);
+    app.get("/usuario/listar_admin", usuarios.listar_admin);
+    app.post("/usuario/eliminar_admin", usuarios.eliminar_admin);
+    app.post("/usuario/crear_admin", usuarios.crear_admin);
 
     //alumnos
     app.post("/alum/experiencia", alumnos.experiencia);

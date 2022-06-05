@@ -33,6 +33,7 @@ import Postulantes from './components/postulantes';
 import Job from './components/job';
 import Editprofilealum from './components/editprofilealum';
 import Logs from './components/logs';
+import valid_admin from './components/admin_validate';
 
 
 //css
@@ -76,6 +77,7 @@ function App() {
         <Route path="/editprofile/:id" component={Editprofilealum}/>
         <Route path="/validate_post" component={ValidatePost}/>
         <Route path="/logs" component={Logs} />
+        <Route path="/admin_validate" component={valid_admin} />
 
 
         {/* <Route path="/principal" component={Principal} />
