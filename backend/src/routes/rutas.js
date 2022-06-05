@@ -22,6 +22,7 @@ module.exports = (app) =>{
     app.get("/usuario/listar_admin", usuarios.listar_admin);
     app.post("/usuario/eliminar_admin", usuarios.eliminar_admin);
     app.post("/usuario/crear_admin", usuarios.crear_admin);
+    app.post("/usuario/change_password", usuarios.change_password);
 
     //alumnos
     app.post("/alum/experiencia", alumnos.experiencia);

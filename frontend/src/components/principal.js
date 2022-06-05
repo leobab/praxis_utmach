@@ -169,7 +169,7 @@ export default class Principal extends Component {
                             }
                         </div>
                     </div> */}
-                    <div className="container mt-5" style={{ height: '500px' }}>
+                    <div className="container" style={{ height: '500px' }}>
                         <h6 style={{ textAlign: 'center' }}>Opciones de Empresa</h6>
                         <hr></hr>
                         <div class="row mt-5" >
@@ -235,7 +235,7 @@ export default class Principal extends Component {
                     <div className="col-lg-12 mt-3">
                         <h6>Al momento no cuenta con un convenio establecido con la UTMACH.</h6>
                         <h6>Por favor, rellene los siguientes documentos:</h6>
-                        <h6>Y envielos al administrador de la página: admin@utmachala.edu.ec</h6>
+                        <h6>Y envielos al administrador de la página: administracion@bolsapracticasmercadotecnia.com</h6>
                         <hr></hr>
                     </div>
                 </If>
@@ -271,7 +271,7 @@ export default class Principal extends Component {
 
                 </If>
                 <If condition={this.state.conectado && this.state.usu_tipo == "admin"}>
-                    <div className="container mt-5" style={{ height: '500px' }}>
+                    <div className="container mt-2" style={{ height: '600px' }}>
                         <h6 style={{ textAlign: 'center' }}>Opciones de Administrador</h6>
                         <hr></hr>
                         <div class="row mt-5 text-center" >
@@ -315,7 +315,7 @@ export default class Principal extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3" >
+                            <div class="col-sm-3 mt-5" >
                                 <div class="card">
                                     <a href="/validate_post"> <img class="card-img-top" src="https://imagenes.elpais.com/resizer/1o1Mhv-_HC1MCqh75DQmoaDsBZc=/1960x0/cloudfront-eu-central-1.images.arcpublishing.com/prisa/A6IQ62G4UNCYDPZ7MVSTQI4SMU.jpg" alt="" /></a>
                                     <div class="card-body">
@@ -325,7 +325,7 @@ export default class Principal extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3" >
+                            <div class="col-sm-3 mt-5" >
                                 <div class="card">
                                     <a href="/admin_validate"> <img class="card-img-top" src="https://www.aval.ec/wp-content/uploads/2018/12/aval.jpg" alt="" /></a>
                                     <div class="card-body">

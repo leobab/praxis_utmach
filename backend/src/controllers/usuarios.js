@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const mail = require("../libs/mail");
 const e = require("express");
 const { Console } = require("console");
+const bcrypt = require("bcryptjs");
 
 const usuarioctrl = {};
 
@@ -17,8 +18,10 @@ usuarioctrl.registrarse = async (req, res) => {
     const usu_codigo = "usu-" + shortuuid().generate();
     const usu_foto = (req.file.filename);
     const { usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_tipo, usu_correo, usu_contrasena, alum_fecha_nac, alum_genero, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio } = req.body
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(usu_contrasena, salt);
     try {
-        await pool.query(`insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?,?)`, [usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena], async (err, rows, fields) => {
+        await pool.query(`insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?,?)`, [usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, hash], async (err, rows, fields) => {
             if (!err) {
                 const directorio = path.resolve('public/usuarios/' + usu_codigo);
                 const foto = path.resolve('public/usuarios/' + usu_codigo + '/foto');
@@ -116,6 +119,48 @@ usuarioctrl.ver_sesion = async (req, res) => {
         }
     } catch (e) {
         res.status(500).json({ mensaje: false, error: e });
+    }
+
+}
+
+usuarioctrl.change_password = async (req, res) => {
+    try {
+
+        const { antigua_pass, nueva_pass } = req.body;
+        if (req.session.usu_codigo != null) {
+            const usu_codigo = req.session.usu_codigo;
+            await pool.query(`SELECT usu_contrasena FROM usuarios WHERE usu_codigo = ? `, [usu_codigo], (err, rows, fields) => {
+                if (!err) {
+                    var json = JSON.parse(JSON.stringify(rows));
+
+                    var pass_correcta = bcrypt.compareSync(antigua_pass, json[0]['usu_contrasena']); // true
+
+                    if(pass_correcta){
+                        var salt = bcrypt.genSaltSync(10);
+                        var hash = bcrypt.hashSync(nueva_pass, salt);
+
+                        pool.query(`UPDATE usuarios SET usu_contrasena = ? WHERE usu_codigo = ?;`, [hash, usu_codigo], (err, rows, fields) => {
+                            if(!err){
+                                res.status(200).json({ mensaje: true});
+                            }else{
+                                res.status(200).json({ mensaje: true, datos: err });
+                            }
+                        });
+
+                    }else{
+                        res.status(200).json({ mensaje: false, datos: "Contraseña anterior no coincide." });
+                    }
+
+                   
+                } else {
+                    res.status(200).json({ mensaje: false, datos: err});
+                }
+            });
+        } else {
+            res.status(200).json({ mensaje: false, datos: "Usuario no logueado" });
+        }
+    } catch (e) {
+        res.status(500).json({ mensaje: false, datos: e });
     }
 
 }
@@ -224,21 +269,31 @@ usuarioctrl.validar_cuenta = async (req, res) => {
 usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
-
-
-        await pool.query('SELECT usu_codigo FROM usuarios WHERE usu_correo = ? and usu_contrasena= ?', [usu_correo, usu_contrasena], async (err, rows, fields) => {
-            if (!err) {
+        await pool.query('SELECT usu_contrasena, usu_codigo, usu_nombre FROM usuarios WHERE usu_correo = ?', [usu_correo], async (err, rows, fields) => {
+            if(!err){
                 var json = JSON.parse(JSON.stringify(rows));
-
                 console.log(json);
-                req.session.usu_codigo = json[0]['usu_codigo'];
-                req.session.usu_nombre = json[0]['usu_nombre'];
-                console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
-                res.status(200).json({ mensaje: true });
-            } else {
-                res.status(200).json({ mensaje: false });
+                var pass_correcta = bcrypt.compareSync(usu_contrasena, json[0]['usu_contrasena']); // true
+
+                if(pass_correcta){
+                    try{
+                        req.session.usu_codigo = json[0]['usu_codigo'];
+                        req.session.usu_nombre = json[0]['usu_nombre'];
+                    }catch(error){
+                        res.status(500).json({ mensaje: false });
+                    }
+                    
+                    console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
+                    res.status(200).json({ mensaje: true });
+                }else{
+                    res.status(500).json({ mensaje: false});
+                }
+                
+            }else{
+                res.status(500).json({ mensaje: false, err: err});
             }
         });
+        
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });
@@ -301,20 +356,36 @@ usuarioctrl.crear_admin = async (req, res) => {
 //usu_codigo_admin
     try {
         const usu_codigo_admin = "adm-"+ shortuuid().generate();
-        const { usu_cedula_ruc, usu_nombre, usu_telefono, usu_correo, usu_contrasena } = req.body
-        await pool.query(` insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?)  `,[usu_codigo_admin, usu_cedula_ruc, usu_nombre, usu_telefono, 'admin.jpg', 'admin', usu_correo, usu_contrasena], async (err, rows) => {
+        const { usu_cedula_ruc, usu_nombre, usu_telefono, usu_correo, usu_contrasena} = req.body
+
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(usu_contrasena, salt);
+
+        await pool.query(` insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?)  `,[usu_codigo_admin, usu_cedula_ruc, usu_nombre, usu_telefono, "admin.png", 'admin', usu_correo, hash], async (err, rows) => {
             if (!err) {
+                const directorio = path.resolve('public/usuarios/' + usu_codigo_admin);
+                const foto = path.resolve('public/usuarios/' + usu_codigo_admin + '/foto');
+                
+                if (!fs.existsSync(directorio)) {
+                    await fs.mkdir(directorio);
+                    await fs.mkdir(foto);
+                }
+                fs.copyFile('admin.png', 'public/usuarios/' + usu_codigo_admin + '/foto/admin.png', (err) => {
+                    if (err) throw err;
+                    console.log('source.txt was copied to destination.txt');
+                });
+    
                 descripcion = "El administrador: " +req.session.usu_nombre+ " ha creado la cuenta de administrador de "+ usu_nombre;
                 await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
-                var json = JSON.parse(JSON.stringify(rows))
-                res.status(200).json({ mensaje: true, datos: json });
+                res.status(200).json({ mensaje: true });
             } else {
                 res.status(500).json({ mensaje: err });
             }
             pool.end;
         });
     } catch (e) {
-        res.status(500).json({ mensaje: err })
+        console.log(e);
+        res.status(500).json({ mensaje: e })
     }
 }
 
@@ -334,14 +405,16 @@ usuarioctrl.eliminar_admin = async (req, res) => {
 
     try {
         const { usu_codigo } = req.body;
-        descripcion = "Se eliminó el administrador: " + usu_nombre;
-        await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
-        const usuarios = await pool.query("DELETE FROM usuarios WHERE usu_codigo=?;", [usu_codigo]);
-        if (usuarios.rowCount > 0) {
-            res.status(200).json({ mensaje: true });
-        } else {
-            res.status(200).json({ mensaje: false });
-        }
+        descripcion = "Se eliminó el administrador: " + usu_codigo;
+        await pool.query("DELETE FROM usuarios WHERE usu_codigo=?;", [usu_codigo], async(err)=>{
+            if(!err){
+                await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
+                res.status(200).json({ mensaje: true });
+            }else{
+                res.status(200).json({ mensaje: false });
+            }
+        });
+        
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });

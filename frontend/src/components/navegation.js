@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-
+import Modalchangepass from './modalchangepass';
 import axios from 'axios'
-
+import $ from 'jquery';
 import config from '../metodos/config_session';
 
 import { If, Then, Else } from 'react-if';
@@ -63,31 +63,38 @@ export default class navegation extends Component {
 
     }
 
+    cambiarpass = (e) => {
+
+        window.location.href = "/changepassword";
+
+    }
+
 
 
     ingresar = async (e) => {
 
         e.preventDefault();
 
-        const response = await axios.post('http://localhost:5000/usuario/ingresar', {
+        await axios.post('http://localhost:5000/usuario/ingresar', {
 
             usu_correo: this.state.usu_correo,
             usu_contrasena: this.state.usu_contrasena
 
-        }, config);
+        }, config).then(function(response){
 
-        if (response.data.mensaje) {
+            if(response.data.mensaje){
+                window.location.href = "/principal";
+            }
 
-            window.location.href = "/principal";
-
-        } else {
+        }).catch(err =>{
+            console.log("se mete aca");
             var container = document.getElementById("containerErrores");
             var el = document.createElement("div");
             el.className = "alert alert-danger alert-dismissible fade show";
             el.role = "alert";
             el.innerHTML = "Correo o contraseña incorrectos. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
             container.append(el);
-        }
+        });
 
     }
 
@@ -124,6 +131,7 @@ export default class navegation extends Component {
         }
         console.log("notis: "+this.state.notis);
     }
+
 
     render() {
 
@@ -184,29 +192,35 @@ export default class navegation extends Component {
                                             <div className="dropdown-menu" style={{right: "0", left: "auto" }}>
                                                 <button className="dropdown-item" onClick={() => this.ver_perfil()} ><i class="fa fa-user" aria-hidden="true"></i> Perfil</button>
                                                 <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Opciones</button>
-                                                <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Opciones</button>
+                                                <button className="dropdown-item" onClick={() => this.cambiarpass()} ><i class="fa fa-key" aria-hidden="true"></i> Cambiar contraseña</button>
+                                                <Modalchangepass />
                                                 <button className="dropdown-item" to="" onClick={() => this.salir()}><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</button>
+                                                <Modalchangepass />
                                             </div>
                                         </If>
                                         <If condition={this.state.usu_tipo === "empresa"}>
                                             <div className="dropdown-menu" style={{right: "0", left: "auto" }}>
                                                 <button className="dropdown-item" onClick={() => this.ver_perfil()} ><i class="fa fa-building" aria-hidden="true"></i> Perfil</button>
                                                 <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Opciones</button>
-                                                <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Opciones</button>
+                                                <button className="dropdown-item" onClick={() => this.cambiarpass()} ><i class="fa fa-key" aria-hidden="true"></i> Cambiar contraseña</button>
+                                                <Modalchangepass />
                                                 <button className="dropdown-item" to="" onClick={() => this.salir()}><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</button>
                                             </div>
                                         </If>
                                         <If condition={this.state.usu_tipo === "admin"}>
                                             <div className="dropdown-menu" style={{right: "0", left: "auto" }}>
                                                 <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Opciones</button>
-                                                <button className="dropdown-item" onClick={() => this.ver_opciones()} ><i class="fa fa-cog" aria-hidden="true"></i> Cambiar contraseña n</button>
+                                                <button className="dropdown-item" onClick={() => this.cambiarpass()} ><i class="fa fa-key" aria-hidden="true"></i> Cambiar contraseña</button>
+                                                <Modalchangepass />
                                                 <button className="dropdown-item" to="" onClick={() => this.salir()}><i class="fa fa-sign-out" aria-hidden="true"></i> Salir</button>
+                                                
                                             </div>
                                         </If>
 
                                     </li>
                                 </ul>
                             </div>
+                            
                         </Then>
                         <Else>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

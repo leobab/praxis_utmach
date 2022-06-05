@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom'
 import $ from 'jquery';
 import Modalcreateadm from './modalcrearadm';
 import config from '../metodos/config_session';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default class Validate_admin extends Component {
 
@@ -81,7 +84,22 @@ export default class Validate_admin extends Component {
 
         if (response.data.mensaje) {
 
-            window.location.href = "/admin_validate";
+            toast.success('Admin eliminado con éxito!', {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                });
+
+
+            
+            setTimeout(function(){
+                window.location.reload();
+            }, 2000);
+
 
         } else {
             var container = document.getElementById("containerErrores");
@@ -131,6 +149,17 @@ export default class Validate_admin extends Component {
                             }
                         </tbody>
                     </table>
+
+                    <ToastContainer position="top-right"
+                            autoClose={1000}
+                            hideProgressBar
+                            newestOnTop={false}
+                            closeOnClick={false}
+                            rtl={false}
+                            pauseOnFocusLoss={false}
+                            draggable={false}
+                            pauseOnHover={false}
+                            />
                 </div>
             </div>
 

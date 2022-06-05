@@ -4,6 +4,9 @@ import $ from 'jquery';
 import axios from 'axios'
 
 import config from '../metodos/config_session';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default class Modalcreateadm extends Component {
     state = {
@@ -34,6 +37,38 @@ export default class Modalcreateadm extends Component {
             usu_correo: this.state.usu_correo,
             usu_contrasena: this.state.usu_contrasena,
         }, config);
+
+        if(response.data.mensaje){
+
+            toast.success('Admin creado con éxito!', {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                });
+
+
+            
+            setTimeout(function(){
+                window.location.reload();
+            }, 2000);
+
+
+        }else{
+            toast.error('Error al crear el admin!', {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                });
+
+        }
 
 
         //limpia el modal
@@ -85,7 +120,7 @@ export default class Modalcreateadm extends Component {
                                 </div>
                                 <div class="form-group">
                                     <b><label for="recipient-name" class="col-form-label">Contraseña: </label></b>
-                                    <input type="text" class="form-control" id="usu_contrasena" name="usu_contrasena" value={this.state.usu_contrasena} onChange={this.onInputChange} />
+                                    <input type="password" class="form-control" id="usu_contrasena" name="usu_contrasena" value={this.state.usu_contrasena} onChange={this.onInputChange} />
                                 </div>
                             </form>
                         </div>
@@ -94,6 +129,16 @@ export default class Modalcreateadm extends Component {
                             <button id="saveIdiom" type="button" class="btn btn-primary" onClick={this.howItWorks} >Guardar</button>
                         </div>
                     </div>
+                    <ToastContainer position="top-right"
+                            autoClose={1000}
+                            hideProgressBar
+                            newestOnTop={false}
+                            closeOnClick={false}
+                            rtl={false}
+                            pauseOnFocusLoss={false}
+                            draggable={false}
+                            pauseOnHover={false}
+                            />
                 </div>
             </div>
         )
