@@ -35,6 +35,7 @@ import Editprofilealum from './components/editprofilealum';
 import Logs from './components/logs';
 import valid_admin from './components/admin_validate';
 import Changepassword from './components/changepassword';
+import Forgetpassword from './components/forgetpassword';
 
 //css
 import './css/App.css'
@@ -79,6 +80,7 @@ function App() {
         <Route path="/logs" component={Logs} />
         <Route path="/admin_validate" component={valid_admin} />
         <Route path="/changepassword" component={Changepassword} />
+        <Route path="/forgetpassword" component={Forgetpassword} />
 
         {/* <Route path="/principal" component={Principal} />
         <Route path="/validarcuenta" component={Validar} />

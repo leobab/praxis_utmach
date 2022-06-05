@@ -23,7 +23,8 @@ module.exports = (app) =>{
     app.post("/usuario/eliminar_admin", usuarios.eliminar_admin);
     app.post("/usuario/crear_admin", usuarios.crear_admin);
     app.post("/usuario/change_password", usuarios.change_password);
-
+    app.post("/usuario/enviar_password_temp", usuarios.enviar_password_temp);
+    
     //alumnos
     app.post("/alum/experiencia", alumnos.experiencia);
     app.post("/alum/estudios", alumnos.estudios);

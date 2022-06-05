@@ -251,7 +251,7 @@ export default class navegation extends Component {
                                             </form>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/chooseregister">¿No tienes cuenta? Registrate</a>
-                                            <a class="dropdown-item" href="#">¿Olvidaste tu contraseña?</a>
+                                            <a class="dropdown-item" href="/forgetpassword">¿Olvidaste tu contraseña?</a>
                                         </div>
 
                                     </li>

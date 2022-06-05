@@ -135,25 +135,25 @@ usuarioctrl.change_password = async (req, res) => {
 
                     var pass_correcta = bcrypt.compareSync(antigua_pass, json[0]['usu_contrasena']); // true
 
-                    if(pass_correcta){
+                    if (pass_correcta) {
                         var salt = bcrypt.genSaltSync(10);
                         var hash = bcrypt.hashSync(nueva_pass, salt);
 
                         pool.query(`UPDATE usuarios SET usu_contrasena = ? WHERE usu_codigo = ?;`, [hash, usu_codigo], (err, rows, fields) => {
-                            if(!err){
-                                res.status(200).json({ mensaje: true});
-                            }else{
+                            if (!err) {
+                                res.status(200).json({ mensaje: true });
+                            } else {
                                 res.status(200).json({ mensaje: true, datos: err });
                             }
                         });
 
-                    }else{
+                    } else {
                         res.status(200).json({ mensaje: false, datos: "Contraseña anterior no coincide." });
                     }
 
-                   
+
                 } else {
-                    res.status(200).json({ mensaje: false, datos: err});
+                    res.status(200).json({ mensaje: false, datos: err });
                 }
             });
         } else {
@@ -225,7 +225,7 @@ usuarioctrl.enviar_codverificacion = async (req, res) => {
                       <td style="padding:0 0 36px 0;color:#153643;">
                         <h1 align="center" style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">ESTE ES TU CODIGO DE VERIFICACIÓN</h1>
                         <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">Este es tu codigo de verificación para tu cuenta en la bolsa de prácticas para la carrera de Mercadotecnia de la Universidad Técnica de Machala, copialo y pegalo en la pagina de verificación</p>
-                        <h1 align="center" style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;"> `+codigo+`  </h1>  
+                        <h1 align="center" style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;"> `+ codigo + `  </h1>  
                         <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;"><a href="https://bolsapracticasmercadotecnia.com/validateaccount" style="color:#ee4c50;text-decoration:underline;">Ir a la web</a></p>
     
                     </td>
@@ -252,7 +252,7 @@ usuarioctrl.enviar_codverificacion = async (req, res) => {
             await mail.sendMail({
                 from: 'administracion@bolsapracticasmercadotecnia.com',
                 to: usu_correo,
-                subject: 'Validación de cuenta en Bolsa de Empleo UTMACH',
+                subject: 'Código de verificación Bolsa de Prácticas Mercadotécnia',
                 html: contentHTML
                 //text: 'Este es tu código de verificación: ' + codigo,
             }, async (err, info) => {
@@ -333,33 +333,143 @@ usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
         await pool.query('SELECT usu_contrasena, usu_codigo, usu_nombre FROM usuarios WHERE usu_correo = ?', [usu_correo], async (err, rows, fields) => {
-            if(!err){
+            if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
                 console.log(json);
                 var pass_correcta = bcrypt.compareSync(usu_contrasena, json[0]['usu_contrasena']); // true
 
-                if(pass_correcta){
-                    try{
+                if (pass_correcta) {
+                    try {
                         req.session.usu_codigo = json[0]['usu_codigo'];
                         req.session.usu_nombre = json[0]['usu_nombre'];
-                    }catch(error){
+                    } catch (error) {
                         res.status(500).json({ mensaje: false });
                     }
-                    
+
                     console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
                     res.status(200).json({ mensaje: true });
-                }else{
-                    res.status(500).json({ mensaje: false});
+                } else {
+                    res.status(500).json({ mensaje: false });
                 }
-                
-            }else{
-                res.status(500).json({ mensaje: false, err: err});
+
+            } else {
+                res.status(500).json({ mensaje: false, err: err });
             }
         });
-        
+
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });
+    }
+}
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
+
+usuarioctrl.enviar_password_temp = async (req, res) => {
+    try {
+        const { usu_correo } = req.body;
+        const password_temp = makeid(5);
+
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(password_temp, salt);
+
+        await pool.query('UPDATE usuarios SET usu_contrasena =? WHERE usu_correo = ?', [hash, usu_correo], async (err, rows, fields) => {
+            if (!err) {
+
+                const contentHTML = `<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta name="x-apple-disable-message-reformatting">
+      <title></title>
+      <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+      <![endif]-->
+      <style>
+        table, td, div, h1, p {font-family: Arial, sans-serif;}
+      </style>
+    </head>
+    <body style="margin:0;padding:0;">
+      <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+        <tr>
+          <td align="center" style="padding:0;">
+            <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #2d7dd8;border-spacing:0;text-align:left;">
+              <tr>
+                <td align="center" style="padding:40px 0 30px 0;background:#ffffff;">
+                  <img src="https://i.ibb.co/94qPVN2/mailutmach.png" alt="" width="500" style="height:auto;display:block;" />
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:36px 30px 42px 30px;">
+                  <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                    <tr>
+                      <td style="padding:0 0 36px 0;color:#153643;">
+                        <h1 align="center" style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">CONTRASEÑA TEMPORAL</h1>
+                        <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">Esta es tu contraseña temporal para tu cuenta en la bolsa de prácticas para la carrera de Mercadotecnia de la Universidad Técnica de Machala. Una vez logueado cambie su contraseña.</p>
+                        <h1 align="center" style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;"> `+ password_temp + `  </h1>  
+                        <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;"><a href="https://bolsapracticasmercadotecnia.com" style="color:#ee4c50;text-decoration:underline;">Ir a la web</a></p>
+    
+                    </td>
+                    </tr>
+              <tr>
+                <td style="padding:30px;background:#ee4c50;">
+                  <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;font-size:9px;font-family:Arial,sans-serif;">
+                    <tr>
+                      <td style="padding:0;width:50%;" align="left">
+                        <p style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
+                          &reg; BOLSA DE PRÁCTICAS MERCADOTECNIA, UTMACH 2022<br/><a href="https://bolsapracticasmercadotecnia.com" style="color:#ffffff;text-decoration:underline;">BOLSA DE PRÁCTICAS</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>`;
+                await mail.sendMail({
+                    from: 'administracion@bolsapracticasmercadotecnia.com',
+                    to: usu_correo,
+                    subject: 'Recuperar contraseña Bolsa de Prácticas Mercadotécnia',
+                    html: contentHTML
+                    //text: 'Este es tu código de verificación: ' + codigo,
+                }, async (err, info) => {
+                    if (err) {
+                        res.status(500).json({ mensaje: false, error: err });
+                    } else {
+                        await pool.query("UPDATE usuarios SET codigo_verificacion = ? WHERE usu_codigo = ?", [codigo, usu_codigo]);
+                        res.status(200).json({ mensaje: true, datos: info.messageId });
+                    }
+                });
+                res.status(200).json({ mensaje: true });
+
+
+            } else {
+                res.status(500).json({ mensaje: false, datos: err });
+            }
+        });
+
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ mensaje: false, datos: e });
     }
 }
 
@@ -417,19 +527,19 @@ usuarioctrl.listar_admin = async (req, res) => {
 }
 
 usuarioctrl.crear_admin = async (req, res) => {
-//usu_codigo_admin
+    //usu_codigo_admin
     try {
-        const usu_codigo_admin = "adm-"+ shortuuid().generate();
-        const { usu_cedula_ruc, usu_nombre, usu_telefono, usu_correo, usu_contrasena} = req.body
+        const usu_codigo_admin = "adm-" + shortuuid().generate();
+        const { usu_cedula_ruc, usu_nombre, usu_telefono, usu_correo, usu_contrasena } = req.body
 
         var salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(usu_contrasena, salt);
 
-        await pool.query(` insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?)  `,[usu_codigo_admin, usu_cedula_ruc, usu_nombre, usu_telefono, "admin.png", 'admin', usu_correo, hash], async (err, rows) => {
+        await pool.query(` insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?)  `, [usu_codigo_admin, usu_cedula_ruc, usu_nombre, usu_telefono, "admin.png", 'admin', usu_correo, hash], async (err, rows) => {
             if (!err) {
                 const directorio = path.resolve('public/usuarios/' + usu_codigo_admin);
                 const foto = path.resolve('public/usuarios/' + usu_codigo_admin + '/foto');
-                
+
                 if (!fs.existsSync(directorio)) {
                     await fs.mkdir(directorio);
                     await fs.mkdir(foto);
@@ -438,8 +548,8 @@ usuarioctrl.crear_admin = async (req, res) => {
                     if (err) throw err;
                     console.log('source.txt was copied to destination.txt');
                 });
-    
-                descripcion = "El administrador: " +req.session.usu_nombre+ " ha creado la cuenta de administrador de "+ usu_nombre;
+
+                descripcion = "El administrador: " + req.session.usu_nombre + " ha creado la cuenta de administrador de " + usu_nombre;
                 await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
                 res.status(200).json({ mensaje: true });
             } else {
@@ -470,15 +580,15 @@ usuarioctrl.eliminar_admin = async (req, res) => {
     try {
         const { usu_codigo } = req.body;
         descripcion = "Se eliminó el administrador: " + usu_codigo;
-        await pool.query("DELETE FROM usuarios WHERE usu_codigo=?;", [usu_codigo], async(err)=>{
-            if(!err){
+        await pool.query("DELETE FROM usuarios WHERE usu_codigo=?;", [usu_codigo], async (err) => {
+            if (!err) {
                 await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
                 res.status(200).json({ mensaje: true });
-            }else{
+            } else {
                 res.status(200).json({ mensaje: false });
             }
         });
-        
+
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });
