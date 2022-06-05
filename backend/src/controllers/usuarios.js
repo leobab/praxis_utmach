@@ -19,7 +19,7 @@ usuarioctrl.registrarse = async (req, res) => {
     const { usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_tipo, usu_correo, usu_contrasena, alum_fecha_nac, alum_genero, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio } = req.body
     try {
         await pool.query(`insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?,?)`, [usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena], async (err, rows, fields) => {
-            if (!err)  {
+            if (!err) {
                 const directorio = path.resolve('public/usuarios/' + usu_codigo);
                 const foto = path.resolve('public/usuarios/' + usu_codigo + '/foto');
                 const cv = path.resolve('public/usuarios/' + usu_codigo + '/cv');
@@ -111,16 +111,10 @@ usuarioctrl.ver_sesion = async (req, res) => {
                     res.status(200).json({ mensaje: false });
                 }
             });
-            console.log('SE INICIO SESION CORRECTAMENTE-------------')
         } else {
             res.status(200).json({ mensaje: false, error: "Usuario no logueado" });
-
-
-            console.log('NO ENCUENTRA LA SESION');
         }
     } catch (e) {
-
-        console.clear('ERROR QUE DEVUELVE ')
         res.status(500).json({ mensaje: false, error: e });
     }
 
@@ -209,7 +203,7 @@ usuarioctrl.validar_cuenta = async (req, res) => {
 
         if (resultados.length > 0) {
             req.session.usu_codigo = ['usu_codigo'];
-            res.status(200).json({ mensaje: true });
+            res.status(200).json({ mensaje: true });?
 
         } else {
 
@@ -231,13 +225,14 @@ usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
 
-        
+
         await pool.query('SELECT usu_codigo FROM usuarios WHERE usu_correo = ? and usu_contrasena= ?', [usu_correo, usu_contrasena], async (err, rows, fields) => {
             if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
 
                 console.log(json);
                 req.session.usu_codigo = json[0]['usu_codigo'];
+                req.session.usu_nombre = json[0]['usu_nombre'];
                 console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
                 res.status(200).json({ mensaje: true });
             } else {
@@ -268,13 +263,12 @@ usuarioctrl.ver_usuario = async (req, res) => {
 
     try {
         const { usu_codigo } = req.body;
-        await pool.query("SELECT * FROM usuarios WHERE usu_codigo=?;", [usu_codigo], async (err, rows)=>{
-            if(!err){
+        await pool.query("SELECT * FROM usuarios WHERE usu_codigo=?;", [usu_codigo], async (err, rows) => {
+            if (!err) {
                 var json = (JSON.parse(JSON.stringify(rows[0])));
                 console.log(json);
-                res.status(200).json({mensaje: true, datos: json});
-
-            }else{
+                res.status(200).json({ mensaje: true, datos: json });
+            } else {
                 res.status(200).json({ mensaje: false, error: "Usuario no logueado" });
             }
         });
@@ -282,6 +276,76 @@ usuarioctrl.ver_usuario = async (req, res) => {
         res.status(500).json({ mensaje: false, error: e });
     }
 
+}
+
+usuarioctrl.listar_admin = async (req, res) => {
+
+    try {
+        await pool.query(`select usu_codigo, usu_correo, usu_nombre, usu_cedula_ruc ,usu_telefono from usuarios where usu_tipo= 'admin'`, (err, rows) => {
+            if (!err) {
+                var json = JSON.parse(JSON.stringify(rows))
+                res.status(200).json({ mensaje: true, datos: json });
+            } else {
+                res.status(500).json({ mensaje: err });
+            }
+
+            pool.end;
+        });
+    } catch (e) {
+        res.status(500).json({ mensaje: err })
+    }
+
+}
+
+usuarioctrl.crear_admin = async (req, res) => {
+//usu_codigo_admin
+    try {
+        const usu_codigo_admin = "adm-"+ shortuuid().generate();
+        const { usu_cedula_ruc, usu_nombre, usu_telefono, usu_correo, usu_contrasena } = req.body
+        await pool.query(` insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?)  `,[usu_codigo_admin, usu_cedula_ruc, usu_nombre, usu_telefono, 'admin.jpg', 'admin', usu_correo, usu_contrasena], async (err, rows) => {
+            if (!err) {
+                descripcion = "El administrador: " +req.session.usu_nombre+ " ha creado la cuenta de administrador de "+ usu_nombre;
+                await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
+                var json = JSON.parse(JSON.stringify(rows))
+                res.status(200).json({ mensaje: true, datos: json });
+            } else {
+                res.status(500).json({ mensaje: err });
+            }
+            pool.end;
+        });
+    } catch (e) {
+        res.status(500).json({ mensaje: err })
+    }
+}
+
+/* usuarioctrl.cambiarcontrasena = async (req, res) => {
+    pool.query(`select usu_codigo, usu_correo, usu_nombre, usu_cedula_ruc ,usu_telefono from usuarios where usu_tipo= 'admin'`, (err, result) => {
+        if (!err) {
+            res.status(200).json({ mensaje: true, datos: result.rows });
+        } else {
+            res.status(500).json({ mensaje: err });
+        }
+
+        pool.end;
+    });
+} */
+
+usuarioctrl.eliminar_admin = async (req, res) => {
+
+    try {
+        const { usu_codigo } = req.body;
+        descripcion = "Se eliminó el administrador: " + usu_nombre;
+        await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
+        const usuarios = await pool.query("DELETE FROM usuarios WHERE usu_codigo=?;", [usu_codigo]);
+        if (usuarios.rowCount > 0) {
+            res.status(200).json({ mensaje: true });
+        } else {
+            res.status(200).json({ mensaje: false });
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ mensaje: false, error: e });
+    }
 }
 
 
