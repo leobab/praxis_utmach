@@ -123,8 +123,49 @@ export default class completeregisterstudent extends Component {
 
     }
 
+    agregarHermanosEdit() {
+
+        console.log("le entra");
+        var rowCount =  ($('#tabla_experiencia tr').length - 1 );
+        rowCount++;
+        $("#tabla_experiencia>tbody").append(`<tr>
+                                                <th class="text-center" style="width: 50px" ><button class="btn btn-danger btn-sm borrarFilas" type="button"><i class="fa fa-times"></i></button></th>
+                                                <th style="width: 100px"><input class="form-control"  type="text" id="exp_empresa_nombre_${rowCount}" name="exp_empresa_nombre_${rowCount}" value=""/></th>
+                                                <th style="width: 100px"><input class="form-control" type="text" id="exp_cargo_${rowCount}" name="exp_cargo_${rowCount}" value=""/></th>
+                                                <th style="width: 100px"><input class="form-control" type="date"  id="exp_fecha_ini_${rowCount}" name="exp_fecha_ini_${rowCount}" value=""  /></th>
+                                                <th style="width: 100px"><input class="form-control" type="date"  id="exp_fecha_fin_${rowCount}" name="exp_fecha_fin_${rowCount}" value=""  /></th>
+                                            </tr>`);
+    }
+
+    
 
     render() {
+
+        function cerrarcard(id){
+            console.log("se mete al menos");
+            const response = axios.post('http://localhost:5000/alum/eliminar_idiomas', {
+                    idio_codigo: id,
+                }, config);
+                $('#cardEst-'+id).parent().fadeOut();
+        }
+
+        $('#close-icon').on('click',function() {
+
+            console.log("se mete aca");
+            var $target = $(this).parents('li');
+
+            const exp = $target.attr("id").split('-');
+
+            const id_exp = exp[1];
+
+            const response = axios.post('http://localhost:5000/alum/eliminar_idiomas', {
+                idio_codigo: id_exp,
+            }, config);
+
+            $(this).closest('.cardEst-').fadeOut();
+            $('#newsHeading').parent().fadeOut();
+        });
+
 
         $('#closeExp').on('click', function () {
 
@@ -196,6 +237,8 @@ export default class completeregisterstudent extends Component {
 
         });
 
+        
+
 
         return (
 
@@ -208,26 +251,43 @@ export default class completeregisterstudent extends Component {
                             <form className="mt-4" onSubmit={this.onSubmit}>
                                 <h6 class="mt-3 mb-3">Descripción personal</h6>
                                 <textarea class="form-control" name="descripcion" onChange={this.onInputChange} value={this.state.descripcion} placeholder="Una descripción bien detallada y extensa de tu perfil profesional te ayudará a destacar entre otros candidatos." rows="2"></textarea>
-                                <h6 class="mt-3 mb-3">Experiencia laboral <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalexp"> + Agregar</button></h6>
+                                <h6 class="mt-3 mb-3">Experiencia laboral <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalexp"> + </button></h6>
+                                {/* <div id="containerExperiencia" class="containerExperiencia mt-3" name="experiencia" onChange={this.howItWorks}>
+                                    <table id="tabla_experiencia" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style={{width:"50px"} }><button class="btn btn-success btn-sm" type="button" onClick={() => this.agregarHermanosEdit()}><i class="fa fa-plus"></i></button></th>
+                                                <th style={{width:"100px"} }>Empresa</th>
+                                                <th style={{width:"100px"} }>Cargo</th>
+                                                <th style={{width:"100px"} }>Fecha Inicio</th>
+                                                <th style={{width:"100px"} }>Fecha Fin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>  */}
+                                
                                 <Modaladdworkexp />
                                 {/* <div id="containerExperiencia" class="containerExperiencia mt-3" name="experiencia" onChange={this.howItWorks}></div> */}
                                 {/* <row class="row list-unstyled" </row> */}
                                 <div class="container" id="containerExperiencia"></div>
-                                <h6 class="mt-3 mb-3">Estudios <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">+ Agregar</button></h6>
+                                <h6 class="mt-3 mb-3">Estudios <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">+</button></h6>
                                 <Modaladdschools />
                                 {/* <div id="containerEstudios" class="mt-3"></div> */}
                                 <ul class="row list-unstyled" id="containerEstudios"></ul>
-                                <h6 class="mt-3 mb-3">Idiomas <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalidioms">+ Agregar</button></h6>
+                                <h6 class="mt-3 mb-3">Idiomas <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalidioms">+</button></h6>
                                 <Modaladdidioms />
                                 <ul class="row list-unstyled" id="containerIdiomas"></ul>
                                 {/* <div id="containerIdiomas" class="mt-3"></div> */}
-                                <h6 class="mt-3 mb-3">Conocimientos y habilidades <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalskills">+ Agregar</button></h6>
+                                <h6 class="mt-3 mb-3">Conocimientos y habilidades <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalskills">+</button></h6>
                                 <Modaladdskills />
                                 {/* <div id="containerConocimientos" class="mt-3"></div> */}
                                 <ul class="row list-unstyled" id="containerConocimientos"></ul>
 
                                 <div className='row'>
-                                    <div className='col-4'>
+                                    <div className='col-6'>
                                         <h6 class="mt-3 mb-3">Disponibilidad de pasantías </h6>
                                         <div className="form-group">
                                             <select className="form-control" onChange={this.onInputChange} name="disponibilidad_pasantias" value={this.state.disponibilidad_pasantias} required>
@@ -241,7 +301,7 @@ export default class completeregisterstudent extends Component {
                                             </select>
                                         </div>
                                     </div>
-                                    <div className='col-4'>
+                                    <div className='col-6'>
                                         <h6 class="mt-3 mb-3">Fecha de practica </h6>
                                         <select className="form-control" onChange={this.onInputChange} name="fecha_listada" value={this.state.fecha_listada} required>
                                             {
@@ -258,7 +318,7 @@ export default class completeregisterstudent extends Component {
                                 <div className="form-group">
 
                                     <div className='row'>
-                                        <div className='col-4'>
+                                        <div className='col-6'>
                                             <h6 class="mt-3 mb-3">Curso</h6>
                                             <select className="form-control" onChange={this.onInputChange} name="alum_sem" value={this.state.alum_sem} required>
                                                 {
@@ -270,7 +330,7 @@ export default class completeregisterstudent extends Component {
                                                 }
                                             </select>
                                         </div>
-                                        <div className='col-4'>
+                                        <div className='col-6'>
                                             <h6 class="mt-3 mb-3">Paralelo</h6>
                                             <select className="form-control" onChange={this.onInputChange} name="alum_paral" value={this.state.alum_paral} required>
                                                 {
@@ -283,7 +343,7 @@ export default class completeregisterstudent extends Component {
                                             </select>
 
                                         </div>
-                                        <div className='col-4'>
+                                        {/* <div className='col-4'>
                                             <h6 class="mt-3 mb-3">Horario disponible</h6>
                                             <select className="form-control" onChange={this.onInputChange} name="horario_alum" value={this.state.horario_alum} required>
                                                 {
@@ -295,7 +355,7 @@ export default class completeregisterstudent extends Component {
                                                 }
                                             </select>
 
-                                        </div>
+                                        </div> */}
 
                                     </div>
 

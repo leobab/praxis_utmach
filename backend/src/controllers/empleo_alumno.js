@@ -98,8 +98,8 @@ empleoalumctrl.seleccionar_alumno = async (req, res) => {
     try {
         const { job_codigo, alum_codigo } = req.body;
         descripcion = "Se seleccionó al alumno: " + alum_codigo + " para el empleo: " + job_codigo;
-        await pool.query("UPDATE empleo_alumno SET estado='AP' WHERE job_codigo=? and alum_codigo=?;", [job_codigo, alum_codigo], async () => {
-            await pool.query("UPDATE alumnos SET alum_estado=2 WHERE alum_codigo=?;", [alum_codigo], async () => {
+        await pool.query("UPDATE empleo_alumno SET estado='AP' WHERE job_codigo=? and alum_codigo=?;", [job_codigo, alum_codigo], async (err, rows) => {
+            await pool.query("UPDATE alumnos SET alum_estado=2 WHERE alum_codigo=?;", [alum_codigo], async (err, rows) => {
                 if (!err) {
                     await pool.query("insert into logs (log_descripcion, log_fecha) values (?,?);", [descripcion, datetime.toISOString().slice(0, 10)])
                     res.status(200).json({ mensaje: true });

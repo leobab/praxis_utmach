@@ -267,36 +267,20 @@ export default class Postulantes extends Component {
                                             <td className='text-center'>{alumnos.usu_direccion}</td>
                                             <td className='text-center'>{alumnos.semestre} {alumnos.paralelo}</td>
                                             <td className='text-center'>{alumnos.alum_d_pasantia}</td>
-                                            <If condition={alumnos.estado_empresa==="P" && alumnos.estado==="P" && this.state.usu_tipo=="empresa"}>
-                                                <td className='text-center'><button type="button" title='Aceptar postulación' class="btn btn-success btn-sm" onClick={()=> this.seleccionar_alumno(alumnos.alum_codigo)}><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                                    <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
-                                            </If>
-                                            <If condition={alumnos.estado_empresa==="P" && alumnos.estado==="P" && this.state.usu_tipo=="admin"}>
-                                                <td className='text-center'>
-                                                    <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                                    <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
-                                            </If>
-                                            <If condition={alumnos.estado_empresa==="AP" && alumnos.estado==="P" && this.state.usu_tipo=="admin"}>
+                                            
+                                            
+                                            <If condition={alumnos.estado==="P" && this.state.usu_tipo=="admin"}>
                                                 <td className='text-center'><button type="button" title='Aprobar postulación' class="btn btn-success btn-sm" onClick={()=> this.aprobar_alumno(alumnos.alum_codigo)}><i class="fa fa-check" aria-hidden="true"></i></button>
                                                     <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                                     <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
                                             </If>
-                                            <If condition={alumnos.estado_empresa==="AP" && alumnos.estado==="P" && this.state.usu_tipo=="empresa"}>
-                                                <td className='text-center'><button type="button"  title='Alumno ya escogido' class="btn btn-success btn-sm" disabled><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                                    <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
-                                            </If>
-                                            <If condition={alumnos.estado_empresa==="AP" && alumnos.estado==="AP" && this.state.usu_tipo=="admin"}>
+                                            
+                                            <If condition={alumnos.estado==="AP" && this.state.usu_tipo=="admin"}>
                                                 <td className='text-center'><button type="button"  title='Alumno ya aprobado' class="btn btn-success btn-sm" disabled><i class="fa fa-check" aria-hidden="true"></i></button>
                                                     <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                                                     <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
                                             </If>
-                                            <If condition={alumnos.estado_empresa==="AP" && alumnos.estado==="AP" && this.state.usu_tipo=="empresa"}>
-                                                <td className='text-center'><button type="button"  title='Alumno ya escogido' class="btn btn-success btn-sm" disabled><i class="fa fa-check" aria-hidden="true"></i></button>
-                                                    <a href={"/profile/" + alumnos.usu_codigo} target="_blank"><button type="button" class="btn btn-primary btn-sm" title='Ver perfil alumno'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                                    <a href={this.state.ruta_server + alumnos.usu_codigo + "/cv/" + alumnos.alum_cv} target="_blank"><button type="button" class="btn btn-info btn-sm" title='Ver CV'><i class="fa fa-book" aria-hidden="true"></i></button></a></td>
-                                            </If>
+                                            
                                             
                                         </tr>
                                     ))

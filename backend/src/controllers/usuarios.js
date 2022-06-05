@@ -151,7 +151,7 @@ usuarioctrl.enviar_codverificacion = async (req, res) => {
             await mail.sendMail({
                 from: 'leobab96@gmail.com',
                 to: usu_correo,
-                subject: 'Validación de cuenta en Bolsa de Empleo UTMACH',
+                subject: 'Código de verificación Bolsa de Prácticas Mercadotécnia',
                 text: 'Este es tu código de verificación: ' + codigo,
             }, async (err, info) => {
                 if (err) {

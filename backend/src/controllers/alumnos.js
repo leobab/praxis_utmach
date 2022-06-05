@@ -13,9 +13,9 @@ alumctrl.completar_registro = async (req, res) => {
         if (req.session.usu_codigo != null) {
             const alum_codigo = req.session.usu_codigo;
             const alum_cv = (req.file.filename);
-            const { alum_descripcion, alum_d_pasantia, alum_sem, alum_paral, alum_disponibilidad, fecha_practica } = req.body;
+            const { alum_descripcion, alum_d_pasantia, alum_sem, alum_paral, alum_disponibilidad, fecha_listada } = req.body;
             descripcion = "Se completó el registro del alumno/a: " + alum_codigo;
-            await pool.query("UPDATE alumnos SET alum_descripcion=?, alum_d_pasantia=?, alum_cv=?, alum_sem=?, alum_paral=?, alum_disponibilidad=?, fecha_practica=? WHERE alum_codigo=?;", [alum_descripcion, alum_d_pasantia, alum_cv, alum_sem, alum_paral, alum_disponibilidad, fecha_practica, alum_codigo], async (err, rows) => {
+            await pool.query("UPDATE alumnos SET alum_descripcion=?, alum_d_pasantia=?, alum_cv=?, alum_sem=?, alum_paral=?, alum_disponibilidad=?, fecha_practica=? WHERE alum_codigo=?;", [alum_descripcion, alum_d_pasantia, alum_cv, alum_sem, alum_paral, alum_disponibilidad, fecha_listada, alum_codigo], async (err, rows) => {
                 
                 if(!err){
                     await fs.rename(req.file.path, ('public/usuarios/' + alum_codigo + '/cv/' + alum_cv));

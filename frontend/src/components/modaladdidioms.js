@@ -88,7 +88,7 @@ export default class Modaladdidioms extends Component {
 
             if(responseIdioma.data.mensaje){
                 const dataIdioma = responseIdioma.data.datos;
-                el.innerHTML = "<div class='thumbnail'> <a id='closeIdioma' class='close' href='#'>×</a>" + dataIdioma.idi_nombre + "<br />" + dataIdioma.niv_nombre;
+                el.innerHTML = "<div class='thumbnail' style='border: 1px solid #ddd'> <a id='closeIdioma' class='close' href='#'>×</a>" +"&nbsp;"+ dataIdioma.idi_nombre + "<br />" +"&nbsp;"+ dataIdioma.niv_nombre;
             }         
 
         }
@@ -106,7 +106,17 @@ export default class Modaladdidioms extends Component {
 
     }
 
+    
+
     render() {
+
+        function cerrarcard(id){
+            console.log("se mete al menos");
+            const response = axios.post('http://localhost:5000/alum/eliminar_idiomas', {
+                    idio_codigo: id,
+                }, config);
+                $('#cardEst-'+id).parent().fadeOut();
+        }
 
         return (
             <div class="modal fade" id="modalidioms" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

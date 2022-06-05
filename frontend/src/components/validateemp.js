@@ -61,9 +61,10 @@ export default class Validateemp extends Component {
 
     }
 
-    async validar(emp_codigo_enviado) {
+    async validar(emp_codigo_enviado, emp_correo) {
         const response = await axios.post('http://localhost:5000/emp/validar_empresa', {
-            emp_codigo: emp_codigo_enviado
+            emp_codigo: emp_codigo_enviado,
+            emp_correo : emp_correo
         }, config);
 
         if (response.data.mensaje) {
@@ -136,7 +137,7 @@ export default class Validateemp extends Component {
                                         <td className='text-center'>{empresas_validar.emp_estado}</td>
                                         <If condition={empresas_validar.emp_estado === 'NO VALIDADO'}>
                                             
-                                            <td className='text-center'><button type="button" onClick={() => this.validar(empresas_validar.usu_codigo)} title='Validar empresa' class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                            <td className='text-center'><button type="button" onClick={() => this.validar(empresas_validar.usu_codigo, empresas_validar.usu_correo)} title='Validar empresa' class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></button>
                                             <button type="button" onClick={() => this.eliminar(empresas_validar.usu_codigo)} title='Eliminar empresa' class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                         </If>
                                         <If condition={empresas_validar.emp_estado === 'VALIDADO'}>

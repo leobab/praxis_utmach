@@ -60,7 +60,7 @@ reqctrl.listar_idiomas = async (req, res) => {
 
 reqctrl.listar_fecha_practica = async (req, res) => {
     try {
-        await pool.query(`SELECT * FROM proyecto_tesis.fecha_practica ORDER BY cod_fecha_practica;`, (err, rows, fields) => {
+        await pool.query(`SELECT * FROM fecha_practica ORDER BY cod_fecha_practica;`, (err, rows, fields) => {
             if (!err) {
                 res.status(200).json({ mensaje: true, datos: JSON.parse(JSON.stringify(rows)) });
             } else {
@@ -170,7 +170,9 @@ reqctrl.ver_datos_alumno = async (req, res) => { //HAY QUE PROBAR CON DATOS
         (SELECT p.paral_nombre FROM paralelos p 
             WHERE a.alum_paral=p.paral_codigo) as paralelo,  
         (SELECT s.sem_nombre as semestre FROM semestres s
-            WHERE a.alum_sem=s.sem_codigo) as semestre
+            WHERE a.alum_sem=s.sem_codigo) as semestre,
+        (SELECT fp.fecha as fecha_practica FROM fecha_practica fp
+            WHERE a.fecha_practica=fp.cod_fecha_practica) as fecha_practica_nombre
     FROM usuarios as u, alumnos as a WHERE u.usu_codigo=a.alum_codigo AND a.alum_codigo=?`, [alum_codigo], (err, rows, fields) => {
             if (!err) {
 

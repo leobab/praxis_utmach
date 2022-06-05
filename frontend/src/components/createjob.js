@@ -147,7 +147,7 @@ export default class createjob extends Component {
                         </div>
                     </Then>
                     <Else>
-                        <Conectadofalse />
+                        {/* <Conectadofalse /> */}
                     </Else>
                 </If>
                 

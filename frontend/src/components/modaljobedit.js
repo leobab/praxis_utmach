@@ -19,18 +19,15 @@ export default class Modaljobedit extends Component {
         hora_entrada: '',
         hora_salida: '',
         horarios:[],
+        fecha_practica: [],
     }
 
     async componentDidMount() {
 
-
-        const responseHorario = await axios.get('http://localhost:5000/req/listar_horarios', config);
-
-        if (responseHorario.data.mensaje) {
-
-            this.setState({ horarios: this.state.horarios.concat(responseHorario.data.datos) });
-
-        } 
+        const responseFecha = await axios.get('http://localhost:5000/req/fecha_practica', config);
+        if (responseFecha.data.mensaje) {
+            this.setState({ fecha_practica: this.state.fecha_practica.concat(responseFecha.data.datos) });
+        }
 
 
     }
@@ -75,7 +72,7 @@ export default class Modaljobedit extends Component {
             //$('#modaljobedit').modal('hide')
             setTimeout(function(){
                 $('#modaljobedit').modal('hide')
-                window.location.href = "/myjobs";
+                window.location.reload();
             }, 2000);
 
             
@@ -115,24 +112,16 @@ export default class Modaljobedit extends Component {
                                         <textarea class="form-control" id="job_ubicacion" name="ubicacion" onChange={this.onInputChange} rows="1"></textarea>
                                     </div>
                                     <div className='col-4'>
-                                        <h6 class="mt-3 mb-3 text-left">Horario empleo</h6>
-                                        <select className="form-control" onChange={this.onInputChange} name="job_disponibilidad" id="job_disponibilidad">
+                                        <h6 class="mt-3 mb-3 text-left">Fecha de prácticas</h6>
+                                        <select className="form-control" onChange={this.onInputChange} id="job_disponibilidad" name="job_disponibilidad" >
                                                 {
-                                                    this.state.horarios.map(horarios => (
-                                                        <option key={horarios.niv_codigo} value={horarios.niv_codigo}>
-                                                            {horarios.niv_nombre}
+                                                    this.state.fecha_practica.map(fecha_practica => (
+                                                        <option key={fecha_practica.cod_fecha_practica} value={fecha_practica.cod_fecha_practica}>
+                                                            {fecha_practica.fecha}
                                                         </option>
                                                     ))
                                                 }
                                         </select>
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div className='col-3'>
-                                        <h6 class="mt-3 mb-3">Fecha finalización</h6>
-                                        <div class="md-form md-outline input-with-post-icon datepicker mb-3 mt-3">
-                                            <input type="date" id="job_fecha_fin" name="fecha_fin" onChange={this.onInputChange} class="form-control" required />
-                                        </div>
                                     </div>
                                 </div>
 

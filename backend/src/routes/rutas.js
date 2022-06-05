@@ -55,6 +55,7 @@ module.exports = (app) =>{
     app.post("/empleo/create_job", empleos.create_job);
     app.post("/empleo/update_job", empleos.update_job);
     app.post("/empleo/finalizar_seleccion_alumnos", empleos.finalizar_seleccion_alumnos);
+    app.post("/empleo/validar_empleo", empleos.validar_empleo);
 
     //empleo_alumno
     app.post("/empalum/guardar", empleo_alumno.guardar);

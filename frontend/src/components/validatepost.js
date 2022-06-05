@@ -183,9 +183,7 @@ export default class validatepost extends Component {
                                             </Then>
                                             <Else>
                                                 <td className='text-center'><a href={"/postulantes/"+empleos.job_codigo } ><button type="button" class="btn btn-primary btn-sm mr-1" title='Ver postulaciones'><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                                <button type="button" title='Editar empleo' class="btn btn-warning btn-sm mr-1" data-toggle="modal" data-target="#modaljobedit" id="submit" onClick={()=> this.openmodal(empleos.job_codigo, empleos.job_titulo, empleos.job_descripcion, empleos.job_area, empleos.job_ubicacion, empleos.job_fecha_ini, empleos.job_fecha_fin, empleos.job_hora_entrada, empleos.job_hora_salida, empleos.job_disponibilidad)}><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                                <Modaljobedit job_codigo={empleos.job_codigo} job_titulo={empleos.job_titulo} job_descripcion={empleos.job_descripcion} job_area={empleos.job_area} job_ubicacion={empleos.job_ubicacion} job_fecha_ini={empleos.job_fecha_ini} job_fecha_fin={empleos.job_fecha_fin} job_hora_entrada={empleos.job_hora_entrada} job_hora_salida={empleos.job_hora_salida} job_disponibilidad={empleos.job_disponibilidad}/>
-                                                <button type="button" onClick={() => this.eliminar(empleos.job_codigo)} title='Eliminar empleo' class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                                </td>
                                             </Else>
                                              
                                         </If>

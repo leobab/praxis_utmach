@@ -195,12 +195,12 @@ img.img-responsive.user-image-login {
 }
 
 #login-modal input[type=text],
-input[type=password] {
+/* input[type=password] {
     margin-top: 10px;
     height: 50px;
     
      
-}
+} */
 
 #div-login-msg,
 #div-lost-msg,
