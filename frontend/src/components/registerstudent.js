@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-
+import Swal from 'sweetalert2'
 
 export default class main extends Component {
 
@@ -67,21 +67,43 @@ export default class main extends Component {
             formData.append('alum_fecha_nac', this.state.alum_fecha_nac);
             formData.append('alum_genero', this.state.alum_genero);
 
-            const responseUsuario = await axios.post('http://localhost:5000/usuario/registrarse', formData,
+            axios.post('http://localhost:5000/usuario/registrarse', formData,
                 {
                     withCredentials: true, headers:
                     {
                         'Content-Type': 'multipart/form-data',
                         'Access-Control-Allow-Origin': true
                     }
-                });
+                }).then(
+                    function(rs){
+                        if(rs.data.mensaje){
+                            window.location.href = "/validateaccount";
+                        }else{
+                            Swal.fire(
+                                'Error!',
+                                'Rellene todos los campos!',
+                                'error'
+                              );
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'El correo ya existe o le falta foto de perfil!',
+                            'error'
+                          );
+                    }
+                );
 
-            if (responseUsuario.data.mensaje) {
-                window.location.href = "/validateaccount";
-            }
+        
         } else {
             console.log("etra abajo");
-            toast("Utilice su correo institucional para crear su cuenta!");   
+            Swal.fire(
+                'Error!',
+                'Utilice su correo institucional para crear su cuenta!',
+                'error'
+              );
         }
 
     }
@@ -121,7 +143,7 @@ export default class main extends Component {
                                                     <label htmlFor="file-input" style={{ cursor: "pointer" }} title="Clic para subir foto de perfil" >
                                                         <img src="https://icons-for-free.com/iconfiles/png/512/avatar+human+people+profile+user+icon-1320168139431219590.png" alt="" id="output" width="200" height="200" style={{ picturstyle, marginBottom: "15px" }} className="rounded-circle" />
                                                     </label>
-                                                    <input id="file-input" type="file" name="images" style={{ display: 'none' }} onChange={this.loadimageprofile} accept="image/*, image/heic, image/heif" required />
+                                                    <input id="file-input" type="file" name="images" style={{ display: 'none' }} onChange={this.loadimageprofile} accept="image/*, image/heic, image/heif"  />
                                                 </div>
                                             </div>
                                         </div>

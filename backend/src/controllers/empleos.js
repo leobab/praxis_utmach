@@ -86,17 +86,23 @@ empleoctrl.create_job = async (req, res) => {
         const { emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_disponibilidad } = req.body;
         var descripcion = "Se creó el empleo: " + job_titulo + " de la empresa: " + emp_codigo;
 
-        await pool.query("INSERT INTO empleos (emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_creacion, job_estado, job_fecha_actu, job_disponibilidad) VALUES (?,?,?,?,?,?,?,?,?);", [emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, datetime.toISOString().slice(0, 10),'DISPONIBLE', null, job_disponibilidad], async (err, rows) => {
-            if (!err) {
-                await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
-                var json = JSON.parse(JSON.stringify(rows));
-                res.status(200).json({ mensaje: true, datos: json });
-            } else {
-                res.status(200).json({ mensaje: false });
-            }
-        });
+        if(job_titulo == undefined || job_area == undefined || job_ubicacion == undefined || job_disponibilidad == undefined){
+            res.status(500).json({ mensaje: false, datos: "Complete todos los campos!" });
+        }else{
+            await pool.query("INSERT INTO empleos (emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, job_fecha_creacion, job_estado, job_fecha_actu, job_disponibilidad) VALUES (?,?,?,?,?,?,?,?,?);", [emp_codigo, job_titulo, job_descripcion, job_area, job_ubicacion, datetime.toISOString().slice(0, 10),'DISPONIBLE', null, job_disponibilidad], async (err, rows) => {
+                if (!err) {
+                    await pool.query("insert into logs (log_descripcion, log_fecha) values (?, ?);", [descripcion, datetime.toISOString().slice(0, 10)]);
+                    var json = JSON.parse(JSON.stringify(rows));
+                    res.status(200).json({ mensaje: true, datos: json });
+                } else {
+                    res.status(500).json({ mensaje: false });
+                }
+            });
+        }
+
+        
     } catch (e) {
-        res.status(500).json({ mensaje: false, error: e });
+        res.status(500).json({ mensaje: false, datos: e });
     }
 }
 

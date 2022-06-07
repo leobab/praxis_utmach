@@ -114,7 +114,7 @@ export default class Validatestudent extends Component {
         return (
 
             <div class="container mt-3 p-5" style={{ height: '100%' }}>
-                <div className='container mt-5' style={{ height: '500px' }}>
+                <div className='container mt-5' >
                     <h6 style={{ textAlign: 'center' }}>Alumnos por validar</h6>
                     <hr></hr>
                     <table id="example" class="display">

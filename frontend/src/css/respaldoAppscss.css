@@ -407,7 +407,7 @@ body{
   /**
   * Desktop Navigation 
   */
-  .navbar {
+  /* .navbar {
     padding: 0;
   }
   .navbar ul {
@@ -505,7 +505,7 @@ body{
       left: -100%;
     }
   }
-  
+   */
   /**
   * Mobile Navigation 
   */

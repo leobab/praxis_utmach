@@ -114,6 +114,7 @@ p{
 
 /*====== menu navbar css ====*/
 .navbar-default {
+  
      background-color: #f7f7f7;
     border-color: #f7f7f7;
 
@@ -2302,7 +2303,7 @@ font-family: sans-serif;
     /**
     * Desktop Navigation 
     */
-    .navbar {
+    /* .navbar {
       padding: 0;
     }
     .navbar ul {
@@ -2404,7 +2405,7 @@ font-family: sans-serif;
     /**
     * Mobile Navigation 
     */
-    .mobile-nav-toggle {
+    /* .mobile-nav-toggle {
       color: #012970;
       font-size: 28px;
       cursor: pointer;
@@ -2489,8 +2490,8 @@ font-family: sans-serif;
     }
     .navbar-mobile .dropdown > .dropdown-active {
       display: block;
-    }
-    
+    } */
+     */
     /*--------------------------------------------------------------
     # Hero Section
     --------------------------------------------------------------*/

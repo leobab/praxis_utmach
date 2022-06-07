@@ -197,19 +197,19 @@ export default class Validateempleos extends Component {
             <If condition={this.state.conectado}>
                 <Then>
                     <div class="container mt-3 p-5" style={{ height: '100%' }}>
-                        <div className='container mt-5' style={{ height: '500px' }}>
+                        <div className='container mt-5'>
                             <h6 style={{ textAlign: 'center' }}>Empleos por validar</h6>
                             <hr></hr>
                             <div id="containerErrores" class="mt-3"></div>
-                            <table id="example" class="display">
+                            <table id="example" class="display"  style={{width:'100%'}}>
                                 <thead>
                                     <tr>
-                                        <th style={{ width: '200px' }}>Empleo</th>
-                                        <th style={{ width: '200px' }}>Empresa</th>
-                                        <th style={{ width: '100px', textAlign:'center' }}>Área</th>
-                                        <th style={{ width: '100px', textAlign:'center' }}>Ubicación</th>
-                                        <th style={{ width: '100px', textAlign:'center' }}>Estado</th>
-                                        <th className='text-center' style={{ width: '200px' }}>Opciones</th>
+                                        <th >Empleo</th>
+                                        <th >Empresa</th>
+                                        <th>Área</th>
+                                        <th>Ubicación</th>
+                                        <th>Estado</th>
+                                        <th className='text-center' >Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>

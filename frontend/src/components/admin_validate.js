@@ -7,18 +7,21 @@ import Modalcreateadm from './modalcrearadm';
 import config from '../metodos/config_session';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2'
 
 
 export default class Validate_admin extends Component {
 
     state = {
         admin_validar: [],
-        conectado: false
+        conectado: false,
     }
 
 
 
     async componentDidMount() {
+
+
         const response = await axios.get('http://localhost:5000/usuario/listar_admin', config);
         if (response.data.mensaje) {
             this.setState({ conectado: true, admin_validar: this.state.admin_validar.concat(response.data.datos) });
@@ -76,39 +79,62 @@ export default class Validate_admin extends Component {
         }
     } */
 
+    preguntar(usu_codigo_admin, usu_nombre_admin){
+
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "El administrador será eliminado del sistema",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, borrar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                this.eliminar(usu_codigo_admin, usu_nombre_admin);
+
+            }});
+
+    }
+
     async eliminar(usu_codigo_admin, usu_nombre_admin) {
-        const response = await axios.post('http://localhost:5000/usuario/eliminar_admin', {
+        await axios.post('http://localhost:5000/usuario/eliminar_admin', {
             usu_codigo: usu_codigo_admin,
             usu_nombre: usu_nombre_admin
-        }, config);
+        }, config).then(
+            function(rs){
+                if(rs.data.mensaje){
+                    Swal.fire(
+                        'Eliminado!',
+                        'Administrador eliminado con éxito',
+                        'success'
+                      );
+        
+                        setTimeout(function(){
+                            window.location.reload();
+                        }, 2000);
+                }else{
+                    Swal.fire(
+                        'Error!',
+                        'Error eliminar administrador',
+                        'error'
+                      );
+        
+                       
+                }
+            }
+        ).catch(
+            function(err){
+                Swal.fire(
+                    'Error!',
+                    'Error eliminar administrador',
+                    'error'
+                  );
+            }
+        );
 
-        if (response.data.mensaje) {
-
-            toast.success('Admin eliminado con éxito!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
-
-
-            
-            setTimeout(function(){
-                window.location.reload();
-            }, 2000);
-
-
-        } else {
-            var container = document.getElementById("containerErrores");
-            var el = document.createElement("div");
-            el.className = "alert alert-danger alert-dismissible fade show";
-            el.role = "alert";
-            el.innerHTML = "Error al borrar admin. <button type='button' class='close' data-dismiss='alert' aria-label='Close'> <span aria-hidden='true'>&times;</span></button>";
-            container.append(el);
-        }
+        
     }
 
     render() {
@@ -116,14 +142,14 @@ export default class Validate_admin extends Component {
         return (
 
             <div class="container mt-3 p-5" style={{ height: '100%' }}>
-                <div className='container mt-5' style={{ height: '500px' }}>
+                <div className='container mt-5'>
                     <h6 style={{ textAlign: 'center' }}>Cuentas de administrador</h6>
                     <hr></hr>
                     <h6 class="mt-3 mb-3"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalcrearadm"> Crear administrador</button></h6>
                     <Modalcreateadm/>
                     
                     <div id="containerErrores" class="mt-3"></div>
-                    <table id="example" class="display">
+                    <table id="example" class="display" style={{width:'100%'}}>
                         <thead>
                             <tr>
                                 <th>Código</th>
@@ -131,22 +157,32 @@ export default class Validate_admin extends Component {
                                 <th>Nombre</th>
                                 <th className='text-center'>Cédula</th>
                                 <th className='text-center'>Teléfono</th>
-                                <th className='text-center' style={{ width: '100px' }}>Opciones</th>
+                                <th className='text-center' >Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                this.state.admin_validar.map(admin_validar => (
-                                    <tr>
-                                        <td>{admin_validar.usu_codigo}</td>
-                                        <td>{admin_validar.usu_correo}</td>
-                                        <td>{admin_validar.usu_nombre}</td>
-                                        <td className='text-center'>{admin_validar.usu_cedula_ruc}</td>
-                                        <td className='text-center'>{admin_validar.usu_telefono}</td>
-                                        <td className='text-center'><button type="button" onClick={() => this.eliminar(admin_validar.usu_codigo, admin_validar.usu_nombre)} title='Eliminar admin' class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
-                                    </tr>
-                                ))
-                            }
+                            
+                                {
+                                    this.state.admin_validar.map(admin_validar => (
+                                        <If condition={admin_validar.usu_codigo != 'adm-dosc5Cqdh8zLmkv6cHbQPT'}>
+                                            <tr>
+                                                <td>{admin_validar.usu_codigo}</td>
+                                                <td>{admin_validar.usu_correo}</td>
+                                                <td>{admin_validar.usu_nombre}</td>
+                                                <td className='text-center'>{admin_validar.usu_cedula_ruc}</td>
+                                                <td className='text-center'>{admin_validar.usu_telefono}</td>
+                                                
+                                                <td className='text-center'><button type="button" onClick={() => this.preguntar(admin_validar.usu_codigo, admin_validar.usu_nombre)} title='Eliminar admin' class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                                
+                                                
+                                                
+                                                
+                                            </tr>
+                                        </If>
+                                    ))
+                                }
+                            
+                            
                         </tbody>
                     </table>
 

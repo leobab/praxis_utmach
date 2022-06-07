@@ -11,7 +11,8 @@ export default class validatepost extends Component {
 
     state = {
         empleos: [],
-        emp_codigo:''
+        emp_codigo:'',
+        usu_tipo:'',
     }
 
 
@@ -23,7 +24,7 @@ export default class validatepost extends Component {
 
             const data = response.data.datos;
 
-            this.setState({ emp_codigo: data.usu_codigo });
+            this.setState({ emp_codigo: data.usu_codigo, usu_tipo: data.usu_tipo });
 
         } 
 
@@ -152,9 +153,9 @@ export default class validatepost extends Component {
         return (
 
             <div class="container mt-3 p-5" style={{ height: '100%' }}>
-                <div className='container mt-5' style={{ height: '500px' }}>
+                <div className='container mt-5' >
                     <div id="mensajeconfirmacion" class="mt-3"></div>
-                    <h6 style={{ textAlign: 'center' }}>Mis empleos</h6>
+                    <h6 style={{ textAlign: 'center' }}><If condition={this.state.usu_tipo=='admin'}><Then>Postulaciones por validar</Then><Else>Mis empleos</Else></If></h6>
                     <hr></hr>
                     <div id="mensajeconfirmacion" class="mt-3"></div>
                     

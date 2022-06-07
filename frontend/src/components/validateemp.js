@@ -29,6 +29,7 @@ export default class Validateemp extends Component {
             this.setState({ conectado: false });
 
         }
+
         $(document).ready(function () {
             $('#example').DataTable({
                 "bDestroy": "true",
@@ -175,9 +176,12 @@ export default class Validateemp extends Component {
         return (
 
             <div class="container mt-3 p-5" style={{ height: '100%' }}>
-                <div className='container mt-5' style={{ height: '500px' }}>
+                <div className='container mt-5'>
+                
                     <h6 style={{ textAlign: 'center' }}>Empresas por validar</h6>
                     <hr></hr>
+                    
+                    
                     <table id="example" class="display">
                         <thead>
                             <tr>
@@ -187,7 +191,7 @@ export default class Validateemp extends Component {
                                 <th className='text-center'>Ubicación</th>
                                 <th className='text-center'>Convenio</th>
                                 <th className='text-center'>Estado</th>
-                                <th className='text-center' style={{ width: '100px' }}>Opciones</th>
+                                <th className='text-center' >Opciones</th>
                             </tr>
                         </thead>
                         <tbody>

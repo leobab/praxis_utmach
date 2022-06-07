@@ -78,7 +78,7 @@ export default class createjob extends Component {
                         }else{
                             Swal.fire(
                                 'Error!',
-                                'Error crear empleo',
+                                rs.data.datos,
                                 'error'
                               );
                         }
@@ -88,7 +88,7 @@ export default class createjob extends Component {
                     function(err){
                         Swal.fire(
                             'Error!',
-                            'Error crear empleo',
+                            'Complete todos los campos!',
                             'error'
                           );
                     }
@@ -119,7 +119,7 @@ export default class createjob extends Component {
                 <If condition={this.state.conectado}>
                     <Then>
                         <div class="col-lg-12 p-5 text center  ">
-                        <div className="card mt-3">
+                        <div className="card mt-5">
                             <div className="card-body">
                                 <h5 className="card-title text-center">Crear empleo</h5>
                                 <form className="mt-4" onSubmit={this.onSubmit}>

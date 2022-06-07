@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import $ from 'jquery';
 
 import axios from 'axios'
-
+import Swal from 'sweetalert2'
 import config from '../metodos/config_session';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,45 +30,57 @@ export default class Modalcreateadm extends Component {
     howItWorks = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post('http://localhost:5000/usuario/crear_admin', {
-            usu_cedula_ruc: this.state.usu_cedula_ruc,
-            usu_nombre: this.state.usu_nombre,
-            usu_telefono: this.state.usu_telefono,
-            usu_correo: this.state.usu_correo,
-            usu_contrasena: this.state.usu_contrasena,
-        }, config);
+        Swal.fire({
+            title: 'Está seguro?',
+            text: "El administrador será creado",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Sí, crear!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.post('http://localhost:5000/usuario/crear_admin', {
+                    usu_cedula_ruc: this.state.usu_cedula_ruc,
+                    usu_nombre: this.state.usu_nombre,
+                    usu_telefono: this.state.usu_telefono,
+                    usu_correo: this.state.usu_correo,
+                    usu_contrasena: this.state.usu_contrasena,
+                }, config).then(
+                    function (rs) {
+                        if (rs.data.mensaje) {
+                            Swal.fire(
+                                'Creado!',
+                                'Administrador creado con éxito',
+                                'success'
+                            );
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Error crear administrador',
+                                'error'
+                            );
 
-        if(response.data.mensaje){
-
-            toast.success('Admin creado con éxito!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
 
 
-            
-            setTimeout(function(){
-                window.location.reload();
-            }, 2000);
+                        }
+                    }
+                ).catch(
+                    function(err){
+                        Swal.fire(
+                            'Error!',
+                            'El correo de administrador ya existe',
+                            'error'
+                        );
+                    }
+                )
 
-
-        }else{
-            toast.error('Error al crear el admin!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                });
-
-        }
+            }
+        });
 
 
         //limpia el modal
@@ -95,7 +107,7 @@ export default class Modalcreateadm extends Component {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            
+
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -130,15 +142,15 @@ export default class Modalcreateadm extends Component {
                         </div>
                     </div>
                     <ToastContainer position="top-right"
-                            autoClose={1000}
-                            hideProgressBar
-                            newestOnTop={false}
-                            closeOnClick={false}
-                            rtl={false}
-                            pauseOnFocusLoss={false}
-                            draggable={false}
-                            pauseOnHover={false}
-                            />
+                        autoClose={1000}
+                        hideProgressBar
+                        newestOnTop={false}
+                        closeOnClick={false}
+                        rtl={false}
+                        pauseOnFocusLoss={false}
+                        draggable={false}
+                        pauseOnHover={false}
+                    />
                 </div>
             </div>
         )

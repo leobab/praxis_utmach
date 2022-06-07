@@ -81,12 +81,12 @@ export default class Postulantes extends Component {
             "language": {
                 "decimal": ",",
                 "thousands": ".",
-                "info": "Mostrando registros del START al END de un total de TOTAL registros",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                 "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
                 "infoPostFix": "",
-                "infoFiltered": "(filtrado de un total de MAX registros)",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
                 "loadingRecords": "Cargando...",
-                "lengthMenu": "Mostrar MENU registros",
+                "lengthMenu": "Mostrar _MENU_ registros",
                 "paginate": {
                     "first": "Primero",
                     "last": "Último",
@@ -235,7 +235,7 @@ export default class Postulantes extends Component {
 
             <div class="container mt-3 p-5" style={{ height: '100%' }}>
                 <If condition={this.state.job_estado=="DISPONIBLE"}>
-                <div className='container mt-5' style={{ height: '100%' }}>
+                <div className='container mt-5'>
                         <h6 style={{ textAlign: 'center' }}>Postulantes para el empleo: {this.state.job_nombre} </h6>
                         <hr></hr>
                         <div id="mensajeconfirmacion" class="mt-3"></div>

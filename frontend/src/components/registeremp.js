@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import $ from 'jquery';
-
+import Swal from 'sweetalert2'
 import axios from 'axios';
 
 
@@ -69,19 +69,36 @@ export default class main extends Component {
         formData.append('emp_fecha_creacion', this.state.emp_fecha_creacion);
         formData.append('emp_convenio', this.state.emp_convenio);
 
-        const responseUsuario = await axios.post('http://localhost:5000/usuario/registrarse', formData,
+        await axios.post('http://localhost:5000/usuario/registrarse', formData,
             {
                 withCredentials: true, headers:
                 {
                     'Content-Type': 'multipart/form-data',
                     'Access-Control-Allow-Origin': true
                 }
-            });
+            }).then(
+                function(rs){
+                    if(rs.data.mensaje){
+                        window.location.href = "/validateaccount";
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            'Complete todos los campos',
+                            'error'
+                          );
+                    }
+                }
+            ).catch(
+                function(err){
+                    Swal.fire(
+                        'Error!',
+                        'Le falta foto de perfil o el correo ya existe',
+                        'error'
+                      );
+                }
+            );
 
-        if (responseUsuario.data.mensaje) {
-            window.location.href = "/validateaccount";
-        }
-
+        
     }
 
 
@@ -175,7 +192,7 @@ export default class main extends Component {
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Descripción de la empresa</label>
-                                            <textarea class="form-control" name="emp_descripcion" onChange={this.onInputChange} value={this.state.emp_descripcion} rows="3"></textarea>
+                                            <textarea class="form-control" name="emp_descripcion" onChange={this.onInputChange} value={this.state.emp_descripcion} rows="3" required></textarea>
                                         </div>
                                         <h6>Fecha de creación de su empresa</h6>
                                         <div class="md-form md-outline input-with-post-icon datepicker mb-3 mt-3">

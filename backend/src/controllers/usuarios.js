@@ -16,44 +16,65 @@ var descripcion = "";
 usuarioctrl.registrarse = async (req, res) => {
 
     const usu_codigo = "usu-" + shortuuid().generate();
-    const usu_foto = (req.file.filename);
-    const { usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_tipo, usu_correo, usu_contrasena, alum_fecha_nac, alum_genero, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio } = req.body
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(usu_contrasena, salt);
-    try {
-        await pool.query(`insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?,?)`, [usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, hash], async (err, rows, fields) => {
-            if (!err) {
-                const directorio = path.resolve('public/usuarios/' + usu_codigo);
-                const foto = path.resolve('public/usuarios/' + usu_codigo + '/foto');
-                const cv = path.resolve('public/usuarios/' + usu_codigo + '/cv');
-                if (!fs.existsSync(directorio)) {
-                    await fs.mkdir(directorio);
-                    await fs.mkdir(foto);
-                    await fs.mkdir(cv);
+    const { usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_tipo, usu_correo, usu_contrasena, alum_fecha_nac, alum_genero, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio } = req.body;
+    var usu_foto = '';
+    if(req.file == undefined){
+        usu_foto = "perfil.png";
+    }else{
+        usu_foto = (req.file.filename);
+    }
+
+    if (usu_cedula_ruc == undefined || usu_nombre == undefined || usu_direccion==undefined || usu_telefono== undefined || usu_correo==undefined || usu_contrasena == undefined) {
+        res.status(500).json({ mensaje: false });
+    } else {
+        
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(usu_contrasena, salt);
+        try {
+            await pool.query(`insert into usuarios (usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, usu_contrasena) values (?,?,?,?,?,?,?,?,?)`, [usu_codigo, usu_cedula_ruc, usu_nombre, usu_direccion, usu_telefono, usu_foto, usu_tipo, usu_correo, hash], async (err, rows, fields) => {
+                if (!err) {
+                    const directorio = path.resolve('public/usuarios/' + usu_codigo);
+                    const foto = path.resolve('public/usuarios/' + usu_codigo + '/foto');
+                    const cv = path.resolve('public/usuarios/' + usu_codigo + '/cv');
+                    if (!fs.existsSync(directorio)) {
+                        await fs.mkdir(directorio);
+                        await fs.mkdir(foto);
+                        await fs.mkdir(cv);
+                    }
+
+                    if(usu_foto == "perfil.png"){
+                        fs.copyFile('perfil.png', 'public/usuarios/' + usu_codigo + '/foto/perfil.png', (err) => {
+                            if (err) throw err;
+                            console.log('source.txt was copied to destination.txt');
+                        });
+                    }else{
+                        await fs.rename(req.file.path, ('public/usuarios/' + usu_codigo + '/foto/' + usu_foto));
+                    }
+                    
+
+                    if (usu_tipo == "alumno") {
+                        var descripcion = "Se registró exitosamente el alumno/a: " + usu_nombre;
+                        await pool.query(`insert into alumnos (alum_codigo, alum_fecha_nac, alum_genero, alum_estado) values (?,?,?,?)`, [usu_codigo, alum_fecha_nac, alum_genero, 1]);
+                        await pool.query(`insert into logs (log_descripcion, log_fecha) values(?,?)`, [descripcion, datetime.toISOString().slice(0, 10)]);
+
+                    } else if (usu_tipo == "empresa") {
+                        var descripcion = "Se registró exitosamente la empresa: " + usu_nombre;
+                        await pool.query(`insert into empresa (emp_codigo, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio, emp_estado) values (?,?,?,?,?,?)`, [usu_codigo, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio, 'NO VALIDADO']);
+                        await pool.query(`insert into logs (log_descripcion, log_fecha) values(?,?)`, [descripcion, datetime.toISOString().slice(0, 10)]);
+                    }
+                    req.session.usu_codigo = usu_codigo;
+                    console.log(req.session.usu_codigo);
+                    res.status(200).json({ mensaje: true });
+                } else {
+                    res.status(500).json({ mensaje: false });
                 }
-                await fs.rename(req.file.path, ('public/usuarios/' + usu_codigo + '/foto/' + usu_foto));
+            })
 
-                if (usu_tipo == "alumno") {
-                    var descripcion = "Se registró exitosamente el alumno/a: " + usu_nombre;
-                    await pool.query(`insert into alumnos (alum_codigo, alum_fecha_nac, alum_genero, alum_estado) values (?,?,?,?)`, [usu_codigo, alum_fecha_nac, alum_genero, 1]);
-                    await pool.query(`insert into logs (log_descripcion, log_fecha) values(?,?)`, [descripcion, datetime.toISOString().slice(0, 10)]);
 
-                } else if (usu_tipo == "empresa") {
-                    var descripcion = "Se registró exitosamente la empresa: " + usu_nombre;
-                    await pool.query(`insert into empresa (emp_codigo, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio, emp_estado) values (?,?,?,?,?,?)`, [usu_codigo, emp_descripcion, emp_categoria, emp_fecha_creacion, emp_convenio, 'NO VALIDADO']);
-                    await pool.query(`insert into logs (log_descripcion, log_fecha) values(?,?)`, [descripcion, datetime.toISOString().slice(0, 10)]);
-                }
-                req.session.usu_codigo = usu_codigo;
-                console.log(req.session.usu_codigo);
-                res.status(200).json({ mensaje: true });
-            } else {
-                res.status(200).json({ mensaje: false });
-            }
-        })
-
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ mensaje: err.message });
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({ mensaje: err.message });
+        }
     }
 
 
@@ -333,30 +354,34 @@ usuarioctrl.ingresar = async (req, res) => {
     try {
         const { usu_correo, usu_contrasena } = req.body;
         await pool.query('SELECT usu_contrasena, usu_codigo, usu_nombre FROM usuarios WHERE usu_correo = ?', [usu_correo], async (err, rows, fields) => {
-            if(!err){
+            if (!err) {
                 var json = JSON.parse(JSON.stringify(rows));
                 console.log(json);
-                var pass_correcta = bcrypt.compareSync(usu_contrasena, json[0]['usu_contrasena']); // true
+                try {
+                    var pass_correcta = bcrypt.compareSync(usu_contrasena, json[0]['usu_contrasena']); // true
+                } catch (err) {
+                    res.status(500).json({ mensaje: false });
+                }
 
-                if(pass_correcta){
-                    try{
+                if (pass_correcta) {
+                    try {
                         req.session.usu_codigo = json[0]['usu_codigo'];
                         req.session.usu_nombre = json[0]['usu_nombre'];
-                    }catch(error){
+                    } catch (error) {
                         res.status(500).json({ mensaje: false });
                     }
-                    
+
                     console.log("CODIGO SESION: " + req.session.usu_codigo);  //////////////////ESTE ES EL INGRESAR BUENO
                     res.status(200).json({ mensaje: true });
-                }else{
-                    res.status(500).json({ mensaje: false});
+                } else {
+                    res.status(500).json({ mensaje: false });
                 }
-                
-            }else{
-                res.status(500).json({ mensaje: false, err: err});
+
+            } else {
+                res.status(500).json({ mensaje: false, err: err });
             }
         });
-        
+
     } catch (e) {
         console.log(e);
         res.status(500).json({ mensaje: false, error: e });
@@ -364,14 +389,14 @@ usuarioctrl.ingresar = async (req, res) => {
 }
 
 function makeid(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
-   }
-   return result;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
 }
 
 usuarioctrl.enviar_password_temp = async (req, res) => {
@@ -544,7 +569,7 @@ usuarioctrl.crear_admin = async (req, res) => {
                     await fs.mkdir(directorio);
                     await fs.mkdir(foto);
                 }
-                fs.copyFile('admin.png', 'public/usuarios/' + usu_codigo_admin + '/foto/admin.png', (err) => {
+                fs.copyFile('perfil.png', 'public/usuarios/' + usu_codigo_admin + '/foto/admin.png', (err) => {
                     if (err) throw err;
                     console.log('source.txt was copied to destination.txt');
                 });

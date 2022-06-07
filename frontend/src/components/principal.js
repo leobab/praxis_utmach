@@ -169,7 +169,7 @@ export default class Principal extends Component {
                             }
                         </div>
                     </div> */}
-                    <div className="container" style={{ height: '500px' }}>
+                    <div className="container mt-5" >
                         <h6 style={{ textAlign: 'center' }}>Opciones de Empresa</h6>
                         <hr></hr>
                         <div class="row mt-5" >
@@ -207,7 +207,7 @@ export default class Principal extends Component {
                     </div>
                 </If>
                 <If condition={this.state.conectado && this.state.usu_tipo == "empresa" && this.state.emp_estado == "NO VALIDADO" && this.state.emp_convenio == 'si'}>
-                    <div className="container mt-5" style={{ height: '500px' }}>
+                    <div className="container mt-5" >
                         <h6 style={{ textAlign: 'center' }}>Su cuenta está en proceso de validación por el administrador.</h6>
                         <h6 style={{ textAlign: 'center' }}>Será notificado durante las próximas 48 horas por correo cuando su cuenta sea validada y pueda usar la aplicación.</h6>
                         <hr></hr>
@@ -240,7 +240,7 @@ export default class Principal extends Component {
                     </div>
                 </If>
                 <If condition={this.state.conectado && this.state.usu_tipo == "alumno"}>
-                    <div className='container mt-5' style={{ height: '500px' }}>
+                    <div className='container mt-5' >
                         <h6 style={{ textAlign: 'center' }}>Ofertas de prácticas disponibles</h6>
                         <hr></hr>
                         <table id="example" class="display">
@@ -271,7 +271,7 @@ export default class Principal extends Component {
 
                 </If>
                 <If condition={this.state.conectado && this.state.usu_tipo == "admin"}>
-                    <div className="container mt-2" style={{ height: '600px' }}>
+                    <div className="container mt-5" >
                         <h6 style={{ textAlign: 'center' }}>Opciones de Administrador</h6>
                         <hr></hr>
                         <div class="row mt-5 text-center" >
